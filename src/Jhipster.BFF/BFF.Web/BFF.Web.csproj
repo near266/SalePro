@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Remove="Controllers\OrderingSvc\**" />
+		<EmbeddedResource Remove="Controllers\OrderingSvc\**" />
+		<None Remove="Controllers\OrderingSvc\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Grpc.Core.Api" Version="2.47.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0-preview.1.23110.8" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.1" />
+		<PackageReference Include="protobuf-net.Grpc.ClientFactory" Version="1.0.152" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Jhipster.Domain.Services\Jhipster.Domain.Services.csproj" />
+		<ProjectReference Include="..\..\Jhipster.gRPC.Contracts.Shared\Jhipster.gRPC.Contracts.Shared.csproj" />
+		<ProjectReference Include="..\..\Jhipster.Module\InteractiveSvc\InteractiveSvc.Application\InteractiveSvc.Application.csproj" />
+		<ProjectReference Include="..\..\Jhipster.Module\Redis\Module.Redis.Library\Module.Redis.Library.csproj" />
+		<ProjectReference Include="..\..\Jhipster.Module\Redis\Module.Redis\Module.Redis.csproj" />
+	</ItemGroup>
+
+</Project>

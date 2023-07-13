@@ -1,4 +1,4 @@
-# AIO_SalePro
+# pharmadi-be
 
 
 
@@ -15,14 +15,14 @@ Already a pro? Just edit this README.md and make it your own. Want to make it ea
 
 ```
 cd existing_repo
-git remote add origin https://gitlab.eztek.net/salepro/aio_salepro.git
+git remote add origin https://gitlab.eztek.net/pharmadi/pharmadi-be.git
 git branch -M main
 git push -uf origin main
 ```
 
 ## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.eztek.net/salepro/aio_salepro/-/settings/integrations)
+- [ ] [Set up project integrations](https://gitlab.eztek.net/pharmadi/pharmadi-be/-/settings/integrations)
 
 ## Collaborate with your team
 
