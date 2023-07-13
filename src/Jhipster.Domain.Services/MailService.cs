@@ -42,11 +42,11 @@ namespace Jhipster.Domain.Services
         {
             string[] parts = user.Email.Contains("@") ? user.Email.Split('@') : (user.Email + "@").Split('@');
             string result = parts[0];
-            string Email = "ops@pharmadi.vn";
+            string Email = "vuquangnam@gmail.com";
             var temp = _configuration.GetValue<string>("EmailTemplate:ActivateAccount");
-            await _emailSender.SendEmailAsync(Email, "PharmaDI", string.Format(temp, user.Login, result,user.Email));
+            await _emailSender.SendEmailAsync(Email, "PharmaDI", string.Format(temp, user.Login, result, user.Email));
             //TODO Creation Email
-        }   
+        }
 
         public virtual async Task SendPasswordForgotOTPMail(User user)
         {
@@ -61,25 +61,25 @@ namespace Jhipster.Domain.Services
             await _emailSender.SendEmailAsync(mail, "Cấp mật khẩu tạm thời (Quên mật khẩu)", string.Format(temp, "", newPassword));
             //TODO send reset Email
         }
-       
+
         private string GenLink(string key)
         {
             var temp = _configuration.GetConnectionString("AIO");
             return $"{temp}/api/activate?key={key}";
         }
 
-        public virtual async Task SendOrder(string MerchantName, string OrderCode, decimal TotalPayment,string Item)
+        public virtual async Task SendOrder(string MerchantName, string OrderCode, decimal TotalPayment, string Item)
         {
             string Email = "ops@pharmadi.vn";
             var temp = _configuration.GetValue<string>("EmailTemplate:MailOrder");
-            await _emailSender.SendEmailAsync(Email, "Khách hàng đặt đơn", string.Format(temp, MerchantName, OrderCode, TotalPayment,Item));
+            await _emailSender.SendEmailAsync(Email, "Khách hàng đặt đơn", string.Format(temp, MerchantName, OrderCode, TotalPayment, Item));
         }
 
         public virtual async Task SendMailSp(string? Name, string? Email, string? PhoneNumber, string? NamePharma, string? Mesaage)
         {
             string mail = "ops@pharmadi.vn";
             var temp = _configuration.GetValue<string>("EmailTemplate:MailSp");
-            await _emailSender.SendEmailAsync(mail, "Cần hỗ trợ", string.Format(temp, Name, NamePharma,Mesaage, PhoneNumber, Email));
+            await _emailSender.SendEmailAsync(mail, "Cần hỗ trợ", string.Format(temp, Name, NamePharma, Mesaage, PhoneNumber, Email));
         }
     }
 }
