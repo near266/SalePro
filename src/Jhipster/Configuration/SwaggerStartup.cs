@@ -14,7 +14,7 @@ namespace Jhipster.Configuration
         {
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v2", new OpenApiInfo { Title = "Checkin API", Version = "0.0.1" });
+                c.SwaggerDoc("v2", new OpenApiInfo { Title = "SalePro API", Version = "0.0.1" });
                 //c.OperationFilter<PageableModelFilter>();
 
                 var filePath = Path.Combine(System.AppContext.BaseDirectory, "Jhipster.xml");
@@ -62,7 +62,7 @@ namespace Jhipster.Configuration
             });
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/v2/api-docs", "Checkin API");
+                c.SwaggerEndpoint("/v2/api-docs", "SalePro API");
             });
             return app;
         }
