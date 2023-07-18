@@ -5,13 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Command\" />
-    <Folder Include="Persistences\" />
-    <Folder Include="Query\" />
-  </ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="12.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\OrderSvc.Domain\OrderSvc.Domain.csproj" />
 	</ItemGroup>
 </Project>

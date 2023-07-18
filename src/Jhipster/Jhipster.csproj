@@ -57,6 +57,7 @@
 		<ProjectReference Include="..\Jhipster.Dto\Jhipster.Dto.csproj" />
 		<ProjectReference Include="..\Jhipster.Domain\Jhipster.Domain.csproj" />
 		<ProjectReference Include="..\Jhipster.Module\InteractiveSvc\InteractiveSvc\InteractiveSvc.csproj" />
+		<ProjectReference Include="..\Jhipster.Module\OrderSvc\OrderSvc\OrderSvc.csproj" />
 		<ProjectReference Include="..\Jhipster.Module\Redis\Module.Redis\Module.Redis.csproj" />
 	</ItemGroup>
 
