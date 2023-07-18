@@ -8,7 +8,7 @@ namespace OrderSvc
 {
     public static class ModuleExtensions
     {
-        public static IServiceCollection AddInteractiveModule(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddOrderModule(this IServiceCollection services, IConfiguration configuration)
         {
                 services.AddBaseCore()
                  .AddBaseInfrastructure(configuration);

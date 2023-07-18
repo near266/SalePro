@@ -17,8 +17,4 @@
     <ProjectReference Include="..\OrderSvc.Domain\OrderSvc.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Persistences\Repositories\" />
-  </ItemGroup>
-
 </Project>

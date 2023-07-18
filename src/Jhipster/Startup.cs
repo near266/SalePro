@@ -19,6 +19,7 @@ using Module.Redis;
 using Microsoft.AspNetCore.Http.Features;
 using InteractiveSvc;
 using BFF.Web;
+using OrderSvc;
 
 [assembly: ApiController]
 
@@ -127,6 +128,7 @@ namespace Jhipster
             // Module
            
             services.AddInteractiveModule(Configuration);
+            services.AddOrderModule(Configuration);
             //// Redis
             services.AddRedisModule(Configuration);
 
