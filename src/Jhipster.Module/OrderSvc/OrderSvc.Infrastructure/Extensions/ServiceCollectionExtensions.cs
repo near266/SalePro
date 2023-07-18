@@ -24,7 +24,13 @@ namespace Modular.OrderSvc.Infrastructure.Extensions
             services.AddMediatR(typeof(AddProductCommand).GetTypeInfo().Assembly);
             services.AddAutoMapper(typeof(AutoMapperProfile));
             // Đăng kí repository
+            services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
+            services.AddScoped(typeof(ICompanyReqository), typeof(CompanyRepository));
+            services.AddScoped(typeof(IPackageMember), typeof(PackgeMemberRepository));
             services.AddScoped(typeof(IProductRepository), typeof(ProductionRepository));
+            services.AddScoped(typeof(ITransactionRepository), typeof(TransactionRepository));
+            services.AddScoped(typeof(IVoucherRepository), typeof(VoucherRepository));
+            
 
             return services;
         }

@@ -23,12 +23,6 @@ namespace OrderSvc.Application.Command.VoucherCommand
 		public int? Status { get; set; }
 		public DateTime? CreatedDate { get; set; }
 		public DateTime? EndDate { get; set; }
-
-		[JsonIgnore]
-		[MaxLength(100)]
-		public string? LastModifiedBy { get; set; }
-		[JsonIgnore]
-		public DateTime? LastModifiedDate { get; set; }
 	}
 	public class UpdateVoucherCommandHandler : IRequestHandler<UpdateVoucherCommand, int>
 	{
