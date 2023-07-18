@@ -11,8 +11,4 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\OrderSvc.Domain\OrderSvc.Domain.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Command\TransactionCommand\" />
-	  <Folder Include="Query\TransactionQuery\" />
-	</ItemGroup>
 </Project>
