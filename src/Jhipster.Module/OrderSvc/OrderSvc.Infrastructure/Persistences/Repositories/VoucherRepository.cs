@@ -41,13 +41,16 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             return await _Db.SaveChangesAsync();
         }
 
-        public async Task<PagedList<Voucher>> SearchOrDetail(Guid? Id, string CodeVoucher, int page, int pageSize)
+		public async Task<Voucher> GetDetail(Guid Id)
+		{
+			var obj = await _Db.vouchers.FirstOrDefaultAsync(i => i.Id.Equals(Id));
+            if(obj ==null) { throw new ArgumentException("not found"); }
+            return obj;
+		}
+
+        public async Task<PagedList<Voucher>> SearchVoucher(string? CodeVoucher, int page, int pageSize)
         {
             var query = _Db.vouchers.AsQueryable();
-            if (Id != null)
-            {
-                query = query.Where(i => i.Id.Equals(Id));
-            }
             if (CodeVoucher != null)
             {
                 query = query.Where(i => !string.IsNullOrEmpty(i.CodeVoucher) && i.CodeVoucher.ToLower().Contains(CodeVoucher.ToLower().Trim()));
@@ -66,7 +69,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             };
         }
 
-        public async Task<int> UpdateVoucher(Voucher voucher)
+		public async Task<int> UpdateVoucher(Voucher voucher)
         {
             var obj = await _Db.vouchers.FindAsync(voucher.Id);
             if (obj != null)
