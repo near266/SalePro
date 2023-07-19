@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using OrderSvc.Application.Command.CategoryCommand;
+using OrderSvc.Application.Command.CompanyCommand;
 using OrderSvc.Application.Command.ProductCommand;
 using OrderSvc.Application.Command.TransactionsCommand;
 using OrderSvc.Application.Command.VoucherCommand;
@@ -14,10 +16,18 @@ namespace OrderSvc.Application.Configurations.Mappers
             CreateMap<Product, Product>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
             CreateMap<AddProductCommand, Product>();
             CreateMap<UpdateProductCommand, Product>();
+            //Category
+            CreateMap<Category, Category>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+            CreateMap<CreateCategoryCommand, Category>();
+            CreateMap<CategoryProduct, CategoryProduct>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+            CreateMap<CreateCategoryProductCommand, CategoryProduct>();
+
 
 
             // Company
             CreateMap<Company, Company>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+            CreateMap<CreateCompanyCommand,Company>();
+            CreateMap<UpdateCompanyCommand, Company>();
             // Voucher
             CreateMap<Voucher, Voucher>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
 			CreateMap<Voucher, AddVoucherCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));

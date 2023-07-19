@@ -29,6 +29,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             return  await _Db.SaveChangesAsync();
         }
 
+
         public async Task<int> DeleteCate(Guid id)
         {
             var check = await _Db.categories.FindAsync(id);
@@ -69,6 +70,25 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                 return await _Db.SaveChangesAsync();
             }
             return 0;
+        }
+        // Category Product
+
+        public async Task<int> AddCatePro(CategoryProduct categoryProduct)
+        {
+            await _Db.categoriesProduct.AddAsync(categoryProduct);
+            return await _Db.SaveChangesAsync();
+        }
+
+        public async Task<int> Delete(Guid id)
+        {
+            var obj = await _Db.categoriesProduct.FirstOrDefaultAsync(i=>i.Id.Equals(id));
+             if (obj == null)
+            {
+                throw new ArgumentException("not found");
+
+            }
+            _Db.categoriesProduct.Remove(obj);
+            return await _Db.SaveChangesAsync();
         }
     }
 }

@@ -1,22 +1,19 @@
 ﻿using AutoMapper;
-using Jhipster.Service.Utilities;
 using MediatR;
 using OrderSvc.Application.Persistences;
-using OrderSvc.Application.Query.ProductQuery;
 using OrderSvc.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OrderSvc.Application.Command.CompanyCommand
 {
-    public class CreateCompanyCommand : IRequest<int>
+    public class UpdateCompanyCommand :IRequest<int>
     {
-     [JsonIgnore]   public Guid Id { get; set; }
+        public Guid Id { get; set; }
         public string CompanyName { get; set; }
 
         [MaxLength(int.MaxValue)]
@@ -25,20 +22,20 @@ namespace OrderSvc.Application.Command.CompanyCommand
             get; set;
         }
     }
-    public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand, int>
+    public class UpdateCompanyCommandHandler : IRequestHandler<UpdateCompanyCommand, int>
     {
         private readonly IMapper _mapper;
-        private readonly  ICompanyReqository _repo;
-       public CreateCompanyCommandHandler(IMapper mapper,ICompanyReqository repo) 
-        { 
+        private readonly ICompanyReqository _repo;
+        public UpdateCompanyCommandHandler(IMapper mapper, ICompanyReqository repo)
+        {
             _mapper = mapper;
             _repo = repo;
         }
 
-        public async Task<int> Handle(CreateCompanyCommand rq, CancellationToken cancellationToken)
+        public async Task<int> Handle(UpdateCompanyCommand rq, CancellationToken cancellationToken)
         {
             var res = _mapper.Map<Company>(rq);
-            return await _repo.Add(res);
+            return await _repo.Update(res);
         }
     }
 }

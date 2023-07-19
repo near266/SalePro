@@ -3,13 +3,13 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using OrderSvc.Application.Command.CompanyCommand;
 using OrderSvc.Application.Command.ProductCommand;
 using OrderSvc.Application.Query.ProductQuery;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OrderSvc.Application.Command.CategoryCommand;
+using BFF.Web.DTOs;
+using OrderSvc.Application.Query.CompanyQuery;
 
 namespace BFF.Web.Controllers
 {
@@ -43,15 +43,36 @@ namespace BFF.Web.Controllers
             return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
         }
         [HttpPost("Product/Create")]
-        public async Task<ActionResult<int>> CreateProduct([FromBody] AddProductCommand rq)
+        public async Task<ActionResult<int>> CreateProduct([FromBody] ProductDTO rq)
         {
             try
             {
+                rq.Id = Guid.NewGuid();
+                var pro = new AddProductCommand
+                {
+                    Id = rq.Id,
+                    ProductName = rq.ProductName,
+                    Price = rq.Price,
+                    CompanyId = rq.CompanyId,
+                    Image= rq.Image,
+                    Decripstion= rq.Decripstion,
+                    CreatedBy=GetUsernameFromContext(),
+                    CreatedDate=DateTime.Now,
+                };
+                var res = await _mediator.Send(pro);
 
-                rq.CreatedDate = DateTime.Now;
-                rq.CreatedBy = GetUsernameFromContext();
-                var res = await _mediator.Send(rq);
-                return Ok(res);
+               if(rq.CateId != null )
+                {
+
+                var catepro =  new CreateCategoryProductCommand
+                {
+                    CategoryId = rq.CateId,
+                    ProductId = rq.Id,
+                };
+              await  _mediator.Send(catepro);
+                }
+             
+                return Ok(1);
             }
             catch (Exception e)
             {
@@ -119,5 +140,87 @@ namespace BFF.Web.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
+        //  COMPANY
+        [HttpPost("Company/Create")]
+        public async Task<IActionResult> CreatCompany([FromBody] CreateCompanyCommand rq)
+        {
+            _logger.LogInformation($"REST request Create Company Product : {JsonConvert.SerializeObject(rq)}");
+
+            try
+            {
+
+
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"REST request to Create Company fail: {e.Message}");
+
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("Company/Search")]
+        public async Task<IActionResult> SearchCompany([FromBody] SearchComapanyQuery rq)
+        {
+            _logger.LogInformation($"REST request Search Company Product : {JsonConvert.SerializeObject(rq)}");
+
+            try
+            {
+
+
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"REST request to Search Company fail: {e.Message}");
+
+                return StatusCode(500, e.Message);
+            }
+        }
+        // Category
+        [HttpPost("Category/Create")]
+        public async Task<IActionResult> CreatCategory([FromBody] CreateCategoryCommand rq)
+        {
+            _logger.LogInformation($"REST request Create Category : {JsonConvert.SerializeObject(rq)}");
+
+            try
+            {
+
+
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"REST request to Create Category fail: {e.Message}");
+
+                return StatusCode(500, e.Message);
+            }
+        }
+        [HttpPost("CategoryProduct/Create")]
+
+        public async Task<IActionResult> CreatCategoryPro([FromBody] CreateCategoryProductCommand rq)
+        {
+            _logger.LogInformation($"REST request Create Category : {JsonConvert.SerializeObject(rq)}");
+
+            try
+            {
+
+
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"REST request to Create Category fail: {e.Message}");
+
+                return StatusCode(500, e.Message);
+            }
+        }
+
     }
 }
