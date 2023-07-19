@@ -25,6 +25,10 @@ namespace Modular.OrderSvc.Infrastructure.Extensions
             services.AddAutoMapper(typeof(AutoMapperProfile));
             // Đăng kí repository
             services.AddScoped(typeof(IProductRepository), typeof(ProductionRepository));
+            services.AddScoped(typeof(ICompanyReqository), typeof(CompanyRepository));
+            services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
+
+
 
             return services;
         }
