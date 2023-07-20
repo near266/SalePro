@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using OrderSvc.Application.Command.CategoryCommand;
 using OrderSvc.Application.Command.CompanyCommand;
+using OrderSvc.Application.Command.PackageCommand;
 using OrderSvc.Application.Command.ProductCommand;
 using OrderSvc.Application.Command.TransactionsCommand;
 using OrderSvc.Application.Command.VoucherCommand;
@@ -36,6 +37,8 @@ namespace OrderSvc.Application.Configurations.Mappers
 			CreateMap<ProfileCustomer, ProfileCustomer>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
             //Package
             CreateMap<PackageMember, PackageMember>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+            CreateMap<CreatePackageCommand, PackageMember>();
+
 			//Transactions
 			CreateMap<Transactions, Transactions>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
 			CreateMap<Transactions, AddTransactionsCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
