@@ -13,6 +13,8 @@ namespace OrderSvc.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+        public Guid ProductId { get; set; }
+        public Product? Product { get; set; }
         public Guid? CustomserId { get; set; }  
         public ProfileCustomer? Customer { get; set; }
         public string? TransactionId { get; set; }

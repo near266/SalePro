@@ -16,8 +16,8 @@ namespace OrderSvc.Application.Command.ProductCommand
     public class UpdateProductCommand :IRequest<int>
     {
         public Guid? Id { get; set; }
-        public Guid? CompanyId { get; set; }
-        public Company? Company { get; set; }
+      
+       
         public string ProductName { get; set; }
         public double? Price { get; set; }
         public double? PriceNum { get; set; }
