@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using OrderSvc.Application.Persistences;
 using OrderSvc.Domain.Abstractions;
 using OrderSvc.Domain.Entities;
+using OrderSvc.Share.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,14 +40,32 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             return await _Db.SaveChangesAsync();
         }
 
-        public async Task<Product> GetDetail(Guid id)
+        public async Task<ProductDTO> GetDetail(Guid id)
         {
-            var obj = await _Db.products.FirstOrDefaultAsync(i=>i.Id.Equals(id));
+            var obj = await _Db.products.Where(i=>i.Id.Equals(id)).Select(i => new ProductDTO
+            {
+                Id = i.Id,
+                CategoryId = i.CategoryProduct.CategoryId,
+                ProductName = i.ProductName,
+                CategoryName = i.CategoryProduct.Category.CategoryName,
+                Price = i.Price,
+                PriceNum = i.PriceNum,
+                warranty = i.warranty,
+                Provider = i.Provider,
+                CompanyId = i.CompanyId,
+                CompanyName = i.Company.CompanyName,
+                Image = i.Image,
+                Decripstion = i.Decripstion,
+                CategoryDescription = i.CategoryProduct.Category.CategoryDescription,
+
+
+
+            }).FirstOrDefaultAsync();
             if (obj == null) {  throw new ArgumentException("not found"); }
             return obj;
         }
 
-        public async Task <PagedList<Product>> SearchProduct(string? name, int page, int pageSize)
+        public async Task <PagedList<ProductDTO>> SearchProduct(string? name, int page, int pageSize)
         {
             var query = _Db.products.AsQueryable();
             if (name != null)
@@ -54,12 +73,30 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                 query = query.Where(i => !string.IsNullOrEmpty(i.ProductName) && i.ProductName.ToLower().Contains(name.ToLower().Trim()));
 
             }
-            var sQuery = query.Include(i => i.CategoryProduct).ThenInclude(i => i.Category);
+            var sQuery = query.Include(i => i.CategoryProduct).ThenInclude(i => i.Category).Select(i => new ProductDTO { 
+             Id = i.Id,
+             CategoryId=i.CategoryProduct.CategoryId,
+             ProductName = i.ProductName,
+             CategoryName=i.CategoryProduct.Category.CategoryName,
+             Price = i.Price,
+             PriceNum = i.PriceNum,
+             warranty=i.warranty,
+             Provider= i.Provider,
+             CompanyId=i.CompanyId,
+             CompanyName=i.Company.CompanyName,
+             Image=i.Image,
+             Decripstion=i.Decripstion,
+             CategoryDescription=i.CategoryProduct.Category.CategoryDescription,
+
+
+            
+            });
+
             var sQuery1 = await sQuery.Skip(pageSize * (page - 1))
                                 .Take(pageSize)
                                 .ToListAsync();
             var reslist = await sQuery.ToListAsync();
-            return new PagedList<Product>
+            return new PagedList<ProductDTO>
             {
                 Data = sQuery1,
                 TotalCount = reslist.Count,

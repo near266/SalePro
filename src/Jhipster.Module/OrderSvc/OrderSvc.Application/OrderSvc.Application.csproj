@@ -10,5 +10,6 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\OrderSvc.Domain\OrderSvc.Domain.csproj" />
+	  <ProjectReference Include="..\OrderSvc.Share\OrderSvc.Share.csproj" />
 	</ItemGroup>
 </Project>

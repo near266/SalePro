@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using OrderSvc.Application.Persistences;
 using OrderSvc.Domain.Entities;
+using OrderSvc.Share.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace OrderSvc.Application.Query.ProductQuery
 {
-    public class SearchProductQuery :IRequest<PagedList<Product>>
+    public class SearchProductQuery :IRequest<PagedList<ProductDTO>>
     {
         public string? name { get; set; }
         public int page { get; set; }
         public int  pageSize { get; set; }
     }
-    public class SearchProductQueryHandler : IRequestHandler<SearchProductQuery, PagedList<Product>>
+    public class SearchProductQueryHandler : IRequestHandler<SearchProductQuery, PagedList<ProductDTO>>
     {
         private readonly IProductRepository _repo;
         private readonly IMapper _mapper;
@@ -30,9 +31,11 @@ namespace OrderSvc.Application.Query.ProductQuery
             _mapper = mapper;
             _logger = logger;
         }
-        public async Task<PagedList<Product>> Handle(SearchProductQuery rq, CancellationToken cancellationToken)
+        public async Task<PagedList<ProductDTO>> Handle(SearchProductQuery rq, CancellationToken cancellationToken)
         {
-            return await _repo.SearchProduct(rq.name,rq.page,rq.pageSize);
+            var res= await _repo.SearchProduct(rq.name,rq.page,rq.pageSize);
+            var map = _mapper.Map<PagedList<ProductDTO>>(res);
+            return res;
         }
 
     }

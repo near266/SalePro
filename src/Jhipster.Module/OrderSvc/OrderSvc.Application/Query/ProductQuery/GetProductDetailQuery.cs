@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using OrderSvc.Application.Command.ProductCommand;
 using OrderSvc.Application.Persistences;
 using OrderSvc.Domain.Entities;
+using OrderSvc.Share.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace OrderSvc.Application.Query.ProductQuery
 {
-    public class GetProductDetailQuery :IRequest<Product>
+    public class GetProductDetailQuery :IRequest<ProductDTO>
     {
         public Guid Id { get; set; }
     }
-    public class GetProductDetailQueryHandler : IRequestHandler<GetProductDetailQuery,Product>
+    public class GetProductDetailQueryHandler : IRequestHandler<GetProductDetailQuery, ProductDTO>
     {
         private readonly IProductRepository _repo;
         private readonly IMapper _mapper;
@@ -29,9 +30,10 @@ namespace OrderSvc.Application.Query.ProductQuery
             _mapper = mapper;
             _logger = logger;
         }
-        public async Task<Product> Handle(GetProductDetailQuery rq,CancellationToken cancellationToken)
+        public async Task<ProductDTO> Handle(GetProductDetailQuery rq,CancellationToken cancellationToken)
         {
-            return await _repo.GetDetail(rq.Id);
+            var res= await _repo.GetDetail(rq.Id);
+            return res;
         }
 
     }
