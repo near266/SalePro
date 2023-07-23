@@ -43,7 +43,7 @@ namespace BFF.Web.Controllers
             return HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
         }
         [HttpPost("Product/Create")]
-        public async Task<ActionResult<int>> CreateProduct([FromBody] ProductDTO rq)
+        public async Task<IActionResult> CreateProduct([FromBody] ProductDTO rq)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace BFF.Web.Controllers
                     CompanyId = rq.CompanyId,
                     Image= rq.Image,
                     PriceNum = rq.PriceNum,
-                    warranty=rq.warranty,
+              
                     Provider=rq.Provider,
                     Decripstion= rq.Decripstion,
                     CreatedBy=GetUsernameFromContext(),
@@ -75,7 +75,7 @@ namespace BFF.Web.Controllers
               await  _mediator.Send(catepro);
                 }
              
-                return Ok(1);
+                return Ok(res);
             }
             catch (Exception e)
             {

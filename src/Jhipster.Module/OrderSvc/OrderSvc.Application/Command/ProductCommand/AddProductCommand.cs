@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using OrderSvc.Application.Persistences;
 using OrderSvc.Domain.Entities;
+using OrderSvc.Share.DTO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace OrderSvc.Application.Command.ProductCommand
 {
-    public class AddProductCommand :IRequest<int>
+    public class AddProductCommand :IRequest<ProductDTO>
     {
         [JsonIgnore]
         public Guid? Id { get; set; }
@@ -23,7 +24,6 @@ namespace OrderSvc.Application.Command.ProductCommand
         public double? PriceNum { get; set; }
 
         public string? Provider { get; set; }
-        public string? warranty { get; set; }
         public List<string>? Image { get; set; }
         public string? Decripstion { get; set; }
         [JsonIgnore]
@@ -36,7 +36,7 @@ namespace OrderSvc.Application.Command.ProductCommand
         [JsonIgnore]
         public DateTime? LastModifiedDate { get; set; }
     }
-    public class AddProductCommandHandler : IRequestHandler<AddProductCommand, int>
+    public class AddProductCommandHandler : IRequestHandler<AddProductCommand, ProductDTO>
     {
         private readonly IProductRepository _repo;
         private readonly IMapper _mapper;
@@ -48,10 +48,17 @@ namespace OrderSvc.Application.Command.ProductCommand
             _mapper = mapper;
             _logger = logger;
         }
-        public async Task<int> Handle(AddProductCommand rq,CancellationToken cancellationToken)
+        public async Task<ProductDTO> Handle(AddProductCommand rq,CancellationToken cancellationToken)
         {
             var value = _mapper.Map<Product>(rq);
-            return await _repo.Add(value,cancellationToken);
+           var check = await _repo.Add(value,cancellationToken);
+            if(check != 0)
+            {
+               var map= _mapper.Map<ProductDTO>(value);
+                return map;
+
+            }
+            return new ProductDTO();
         }
 
     }
