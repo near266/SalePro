@@ -19,7 +19,11 @@ namespace OrderSvc.Application.Command.ProductCommand
         public Guid? Id { get; set; }
         public Guid? CompanyId { get; set; }
         public string ProductName { get; set; }
-        public decimal? Price { get; set; }
+        public double? Price { get; set; }
+        public double? PriceNum { get; set; }
+
+        public string? Provider { get; set; }
+        public string? warranty { get; set; }
         public List<string>? Image { get; set; }
         public string? Decripstion { get; set; }
         [JsonIgnore]
