@@ -16,6 +16,8 @@ namespace OrderSvc.Application.Command.PackageCommand
         [JsonIgnore]
         public Guid Id { get; set; }
         public Guid? CustomerId { get; set; }
+        public int? Status { get; set; }
+
         public string PackageName { get; set; }
         public string Decripstion { get; set; }
         public DateTime? Created { get; set; }

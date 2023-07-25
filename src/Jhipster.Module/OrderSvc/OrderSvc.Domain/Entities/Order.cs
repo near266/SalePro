@@ -14,11 +14,14 @@ namespace OrderSvc.Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public Guid ProductId { get; set; }
-        public Product? Product { get; set; }
-        public Guid? CustomserId { get; set; }  
-        public ProfileCustomer? Customer { get; set; }
+        public IEnumerable <Product>? Product { get; set; }
+        public Guid? SalePerson { get; set; }
+        public Guid? BoughtPerson { get; set; }
+        public Guid? VoucherId { get; set; }
         public string? TransactionId { get; set; }
         public Transactions? Transactions { get; set; }
+        public Guid? AffiliateId {  get; set; }
+        public Affiliates? Affiliates { get; set;}
 
     }
 }

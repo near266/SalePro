@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace BFF.Web.DTOs
 {
-    public class EventDateDTO
+    public class ApproveRq
     {
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
+        public Guid Id { get; set; }    
+        public int ? status { get; set; }
+
+
     }
 }

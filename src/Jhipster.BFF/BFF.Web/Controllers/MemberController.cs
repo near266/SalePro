@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using OrderSvc.Application.Command.PackageCommand;
 using OrderSvc.Application.Command.ProductCommand;
 using OrderSvc.Controller;
 using System;
@@ -45,13 +46,27 @@ namespace BFF.Web.Controllers
 
 
         [HttpPost("Package/Create")]
-        public async Task<ActionResult<int>> CreatePackage([FromBody] AddProductCommand rq)
+        public async Task<ActionResult<int>> CreatePackage([FromBody] CreatePackageCommand rq)
         {
             try
             {
 
-                rq.CreatedDate = DateTime.Now;
-                rq.CreatedBy = GetUsernameFromContext();
+               
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+        [HttpPost("Package/Approve")]
+        public async Task<ActionResult<int>> ApprovePackge([FromBody] UpdatePackageCommand rq)
+        {
+            try
+            {
+
+              
                 var res = await _mediator.Send(rq);
                 return Ok(res);
             }

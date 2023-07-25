@@ -14,16 +14,16 @@ using System.Transactions;
 
 namespace OrderSvc.Application.Command.TransactionsCommand
 {
-	public class AddTransactionsCommand : IRequest<int>
+	public class AddTransactionsCommand : IRequest<Transactions>
 	{
-		[JsonIgnore]
-		public string TransactionId { get; set; }
-		public string TransactionType { get; set; }
+        public string? TransactionName { get; set; }
+
+        public string TransactionType { get; set; }
 		public decimal? TotalAmount { get; set; }
 		public DateTime? TransactionDate { get; set; }
 		public string? PaymentMethod { get; set; }
 	}
-	public class AddTransactionsCommandHandler : IRequestHandler<AddTransactionsCommand, int>
+	public class AddTransactionsCommandHandler : IRequestHandler<AddTransactionsCommand, Transactions>
 	{
 		private readonly ITransactionRepository _repo;
 		private readonly IMapper _mapper;
@@ -35,10 +35,10 @@ namespace OrderSvc.Application.Command.TransactionsCommand
 			_mapper = mapper;
 			_logger = logger;
 		}
-		public async Task<int> Handle(AddTransactionsCommand request, CancellationToken cancellationToken)
+		public async Task<Transactions> Handle(AddTransactionsCommand request, CancellationToken cancellationToken)
 		{
 			var value = _mapper.Map<Transactions>(request);
-			return await _repo.AddTransaction(value);
+			 return await _repo.AddTransaction(value);
 		}
 	}
 }

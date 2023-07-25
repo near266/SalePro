@@ -32,7 +32,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
 
         public async Task<int> DeleteCate(Guid id)
         {
-            var check = await _Db.categories.FindAsync(id);
+            var check = await _Db.categories.FirstOrDefaultAsync(i=>i.Id==id);
             if (check == null) { throw new ArgumentException("not foud"); }
             return await _Db.SaveChangesAsync();
         }
@@ -81,13 +81,13 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
 
         public async Task<int> Delete(Guid id)
         {
-            var obj = await _Db.categoriesProduct.FirstOrDefaultAsync(i=>i.Id.Equals(id));
+            var obj = await _Db.categoriesProduct.Where(i=>i.ProductId==id).ToListAsync();
              if (obj == null)
             {
                 throw new ArgumentException("not found");
 
             }
-            _Db.categoriesProduct.Remove(obj);
+            _Db.categoriesProduct.RemoveRange(obj);
             return await _Db.SaveChangesAsync();
         }
     }

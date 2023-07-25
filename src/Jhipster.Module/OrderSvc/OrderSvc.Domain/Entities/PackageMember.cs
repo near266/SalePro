@@ -15,6 +15,7 @@ namespace OrderSvc.Domain.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public Guid? CustomerId { get; set; }
+        public int? Status { get; set; }
         public ProfileCustomer? Customer { get; set; }
         public string PackageName { get; set; }
         public string Decripstion { get; set; }

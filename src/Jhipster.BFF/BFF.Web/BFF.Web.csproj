@@ -24,7 +24,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Jhipster.Domain.Services\Jhipster.Domain.Services.csproj" />
 		<ProjectReference Include="..\..\Jhipster.gRPC.Contracts.Shared\Jhipster.gRPC.Contracts.Shared.csproj" />
-		<ProjectReference Include="..\..\Jhipster.Module\InteractiveSvc\InteractiveSvc.Application\InteractiveSvc.Application.csproj" />
 		<ProjectReference Include="..\..\Jhipster.Module\OrderSvc\OrderSvc.Application\OrderSvc.Application.csproj" />
 		<ProjectReference Include="..\..\Jhipster.Module\Redis\Module.Redis.Library\Module.Redis.Library.csproj" />
 		<ProjectReference Include="..\..\Jhipster.Module\Redis\Module.Redis\Module.Redis.csproj" />

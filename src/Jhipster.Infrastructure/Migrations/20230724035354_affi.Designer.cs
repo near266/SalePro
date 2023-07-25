@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Jhipster.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Jhipster.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    partial class ApplicationDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230724035354_affi")]
+    partial class affi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -420,12 +422,6 @@ namespace Jhipster.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("AffiliateId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("AffiliatesId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("BoughtPerson")
                         .HasColumnType("uuid");
 
@@ -445,8 +441,6 @@ namespace Jhipster.Infrastructure.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AffiliatesId");
 
                     b.HasIndex("TransactionsTransactionId");
 
@@ -766,15 +760,9 @@ namespace Jhipster.Infrastructure.Migrations
 
             modelBuilder.Entity("OrderSvc.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("OrderSvc.Domain.Entities.Affiliates", "Affiliates")
-                        .WithMany()
-                        .HasForeignKey("AffiliatesId");
-
                     b.HasOne("OrderSvc.Domain.Entities.Transactions", "Transactions")
                         .WithMany()
                         .HasForeignKey("TransactionsTransactionId");
-
-                    b.Navigation("Affiliates");
 
                     b.Navigation("Transactions");
                 });

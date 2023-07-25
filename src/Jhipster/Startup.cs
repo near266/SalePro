@@ -127,7 +127,6 @@ namespace Jhipster
             services.AddScoped(typeof(IJwtRepository), typeof(JwtRepository));
             // Module
            
-            services.AddInteractiveModule(Configuration);
             services.AddOrderModule(Configuration);
             //// Redis
             services.AddRedisModule(Configuration);

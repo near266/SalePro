@@ -11,7 +11,7 @@ namespace OrderSvc.Application.Persistences
 {
     public interface ITransactionRepository
     {
-        Task<int> AddTransaction(Transactions transaction);
+        Task<Transactions> AddTransaction(Transactions transaction);
         Task<int> DeleteTransaction(Guid? Id);
         Task<int> UpdateTransaction(Transactions transaction);
         Task<Transactions> GetTransaction(Guid? Id);

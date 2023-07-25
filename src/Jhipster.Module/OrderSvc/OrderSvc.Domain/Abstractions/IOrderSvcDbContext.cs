@@ -15,6 +15,8 @@ namespace OrderSvc.Domain.Abstractions
         public DbSet<Transactions> Transactions { get; set; }
         public DbSet<VoucherProductCustomer> voucherProductsCustomer { get; set; }
         public DbSet<Voucher> vouchers { get; set; }
+        public DbSet<Affiliates> affiliates { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

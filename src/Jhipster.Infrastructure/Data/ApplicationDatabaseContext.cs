@@ -8,9 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using InteractiveSvc.Domain.Entities.Meetings;
-using InteractiveSvc.Domain.Entities;
-using InteractiveSvc.Domain.Entities.Events;
+
 using OrderSvc.Domain.Entities;
 
 namespace Jhipster.Infrastructure.Data
@@ -31,13 +29,7 @@ namespace Jhipster.Infrastructure.Data
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public DbSet<Meeting> Meetings { get; set; }
-        public DbSet<MeetingJoin> MeetingJoins { get; set; }
-
-        public DbSet<Event> Events { get; set; }
-        public DbSet<EventJoin> EventJoins { get; set; }
-
-        public DbSet<UserProfile> UserProfiles { get; set; }
+   
 
         #region Order
         public DbSet<Category> categories { get; set; }
@@ -50,6 +42,8 @@ namespace Jhipster.Infrastructure.Data
         public DbSet<Transactions> Transactions { get; set; }
         public DbSet<VoucherProductCustomer> voucherProductsCustomer { get; set; }
         public DbSet<Voucher> vouchers { get; set; }
+        public DbSet<Affiliates> affiliates { get; set; }
+
         #endregion
 
         protected override void OnModelCreating(ModelBuilder builder)

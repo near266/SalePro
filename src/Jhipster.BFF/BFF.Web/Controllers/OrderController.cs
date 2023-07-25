@@ -10,6 +10,8 @@ using OrderSvc.Application.Query.ProductQuery;
 using OrderSvc.Application.Command.CategoryCommand;
 using BFF.Web.DTOs;
 using OrderSvc.Application.Query.CompanyQuery;
+using OrderSvc.Application.Command.OrderCommand;
+using OrderSvc.Application.Command.TransactionsCommand;
 
 namespace BFF.Web.Controllers
 {
@@ -54,27 +56,27 @@ namespace BFF.Web.Controllers
                     ProductName = rq.ProductName,
                     Price = rq.Price,
                     CompanyId = rq.CompanyId,
-                    Image= rq.Image,
+                    Image = rq.Image,
                     PriceNum = rq.PriceNum,
-              
-                    Provider=rq.Provider,
-                    Decripstion= rq.Decripstion,
-                    CreatedBy=GetUsernameFromContext(),
-                    CreatedDate=DateTime.Now,
+
+                    Provider = rq.Provider,
+                    Decripstion = rq.Decripstion,
+                    CreatedBy = GetUsernameFromContext(),
+                    CreatedDate = DateTime.Now,
                 };
                 var res = await _mediator.Send(pro);
 
-               if(rq.CateId != null )
+                if (rq.CateId != null)
                 {
 
-                var catepro =  new CreateCategoryProductCommand
-                {
-                    CategoryId = rq.CateId,
-                    ProductId = rq.Id,
-                };
-              await  _mediator.Send(catepro);
+                    var catepro = new CreateCategoryProductCommand
+                    {
+                        CategoryId = rq.CateId,
+                        ProductId = rq.Id,
+                    };
+                    await _mediator.Send(catepro);
                 }
-             
+
                 return Ok(res);
             }
             catch (Exception e)
@@ -103,7 +105,8 @@ namespace BFF.Web.Controllers
         {
             try
             {
-
+                var deletecatepro = new DeleteCateProCommand { Id =rq.Id};
+                var del = await _mediator.Send(deletecatepro);
 
                 var res = await _mediator.Send(rq);
                 return Ok(res);
@@ -225,5 +228,45 @@ namespace BFF.Web.Controllers
             }
         }
 
+        [HttpPost("Order/Create")]
+
+        public async Task<IActionResult> CreatOrder([FromBody] TransactionDto rq)
+        {
+            _logger.LogInformation($"REST request Create Category : {JsonConvert.SerializeObject(rq)}");
+
+            try
+            {
+                // tao phien giao dich
+                var tran = new AddTransactionsCommand
+                {
+                    TransactionName= rq.TransactionName,
+                    TransactionType= rq.TransactionType,
+                    TransactionDate= rq.TransactionDate,
+                    PaymentMethod= rq.PaymentMethod,
+
+                };
+              var tranres=  await _mediator.Send(tran);
+                // nhap affiiate
+                var aff = new AddAffiliateCommand
+                {
+                    BuyerId= rq.BuyerId,
+                    SalerId= rq.SalerId,
+                    ReferrerId  = rq.ReferrerId,
+                    ParticipantsId= rq.ParticipantsId,
+                };
+
+                var affires = await _mediator.Send(aff);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"REST request to Create Category fail: {e.Message}");
+
+                return StatusCode(500, e.Message);
+
+
+            }
+        }
     }
 }

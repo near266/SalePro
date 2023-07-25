@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Jhipster.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Jhipster.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    partial class ApplicationDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230723160821_update")]
+    partial class update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -276,43 +278,6 @@ namespace Jhipster.Infrastructure.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("OrderSvc.Domain.Entities.Affiliates", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("BuyerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("ParticipantsId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ReferrerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("SalerId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("affiliates");
-                });
-
             modelBuilder.Entity("OrderSvc.Domain.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
@@ -420,19 +385,13 @@ namespace Jhipster.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("AffiliateId")
+                    b.Property<Guid?>("CustomerId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("AffiliatesId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("BoughtPerson")
+                    b.Property<Guid?>("CustomserId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("SalePerson")
                         .HasColumnType("uuid");
 
                     b.Property<string>("TransactionId")
@@ -441,12 +400,11 @@ namespace Jhipster.Infrastructure.Migrations
                     b.Property<string>("TransactionsTransactionId")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("VoucherId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("AffiliatesId");
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("TransactionsTransactionId");
 
@@ -515,9 +473,6 @@ namespace Jhipster.Infrastructure.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("OrderId")
-                        .HasColumnType("uuid");
-
                     b.Property<double?>("Price")
                         .HasColumnType("double precision");
 
@@ -537,8 +492,6 @@ namespace Jhipster.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("products");
                 });
@@ -600,9 +553,6 @@ namespace Jhipster.Infrastructure.Migrations
 
                     b.Property<DateTime?>("TransactionDate")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("TransactionName")
-                        .HasColumnType("text");
 
                     b.Property<string>("TransactionType")
                         .IsRequired()
@@ -766,15 +716,23 @@ namespace Jhipster.Infrastructure.Migrations
 
             modelBuilder.Entity("OrderSvc.Domain.Entities.Order", b =>
                 {
-                    b.HasOne("OrderSvc.Domain.Entities.Affiliates", "Affiliates")
+                    b.HasOne("OrderSvc.Domain.Entities.ProfileCustomer", "Customer")
                         .WithMany()
-                        .HasForeignKey("AffiliatesId");
+                        .HasForeignKey("CustomerId");
+
+                    b.HasOne("OrderSvc.Domain.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("OrderSvc.Domain.Entities.Transactions", "Transactions")
                         .WithMany()
                         .HasForeignKey("TransactionsTransactionId");
 
-                    b.Navigation("Affiliates");
+                    b.Navigation("Customer");
+
+                    b.Navigation("Product");
 
                     b.Navigation("Transactions");
                 });
@@ -793,10 +751,6 @@ namespace Jhipster.Infrastructure.Migrations
                     b.HasOne("OrderSvc.Domain.Entities.Company", "Company")
                         .WithMany("Products")
                         .HasForeignKey("CompanyId");
-
-                    b.HasOne("OrderSvc.Domain.Entities.Order", null)
-                        .WithMany("Product")
-                        .HasForeignKey("OrderId");
 
                     b.Navigation("Company");
                 });
@@ -846,11 +800,6 @@ namespace Jhipster.Infrastructure.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("OrderSvc.Domain.Entities.Order", b =>
-                {
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("OrderSvc.Domain.Entities.Product", b =>

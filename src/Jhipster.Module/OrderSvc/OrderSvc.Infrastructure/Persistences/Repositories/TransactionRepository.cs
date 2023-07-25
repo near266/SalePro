@@ -22,10 +22,11 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             _Db = db;
         }
 
-        public async Task<int> AddTransaction(Transactions transaction)
+        public async Task<Transactions> AddTransaction(Transactions transaction)
         {
             await _Db.AddAsync(transaction);
-            return await _Db.SaveChangesAsync();
+            await _Db.SaveChangesAsync();
+            return transaction;
         }
 
         public async Task<int> DeleteTransaction(Guid? Id)

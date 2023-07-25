@@ -2,6 +2,7 @@
 using Jhipster.Service.Utilities;
 using OrderSvc.Application.Command.CategoryCommand;
 using OrderSvc.Application.Command.CompanyCommand;
+using OrderSvc.Application.Command.OrderCommand;
 using OrderSvc.Application.Command.PackageCommand;
 using OrderSvc.Application.Command.ProductCommand;
 using OrderSvc.Application.Command.TransactionsCommand;
@@ -49,7 +50,12 @@ namespace OrderSvc.Application.Configurations.Mappers
 			CreateMap<Transactions, Transactions>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
 			CreateMap<Transactions, AddTransactionsCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
 			CreateMap<Transactions, UpdateTransactionsCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+            //Order
 
-		}
+            CreateMap<Order, Order>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+            CreateMap<Order, CreateOrderCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+
+
+        }
     }
 }

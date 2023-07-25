@@ -18,6 +18,8 @@ namespace InteractiveSvc.Infrastructure.Persistences
         public DbSet<Transactions> Transactions { get; set; }
         public DbSet<VoucherProductCustomer> voucherProductsCustomer { get; set; }
         public DbSet<Voucher> vouchers { get; set; }
+        public DbSet<Affiliates> affiliates { get; set; }
+
         public OrderSvcDbContext(DbContextOptions<OrderSvcDbContext> options) : base(options)
         {
 

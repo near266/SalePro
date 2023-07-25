@@ -29,6 +29,7 @@ namespace OrderSvc.Application.Command.ProductCommand
         }
         public async Task<int> Handle(DeleteProductCommand rq, CancellationToken cancellationToken)
         {
+
             return await _repo.Delete(rq.Id);
         }
 

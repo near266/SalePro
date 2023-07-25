@@ -1,5 +1,4 @@
-﻿using InteractiveSvc.Domain.Abstractions;
-using InteractiveSvc.Infrastructure.Persistences;
+﻿using InteractiveSvc.Infrastructure.Persistences;
 using Jhipster.Infrastructure.Shared;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -30,7 +29,9 @@ namespace Modular.OrderSvc.Infrastructure.Extensions
             services.AddScoped(typeof(IProductRepository), typeof(ProductionRepository));
             services.AddScoped(typeof(ITransactionRepository), typeof(TransactionRepository));
             services.AddScoped(typeof(IVoucherRepository), typeof(VoucherRepository));
-            
+            services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
+
+
 
             return services;
         }
