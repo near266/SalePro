@@ -132,9 +132,16 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
 
         }
 
-        public Task<int> UpdateOrder(Order order)
+        public async Task<int> UpdateOrder(Order order, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var obj = await _Db.orders.FirstOrDefaultAsync(i => i.Id.Equals(order.Id));
+            if (obj != null)
+            {
+                obj.Status=order.Status;
+                _mapper.Map<Order, Order>(obj, order);
+                return await _Db.SaveChangesAsync(cancellationToken);
+            }
+            return 0;
         }
     }
 }

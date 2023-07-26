@@ -294,6 +294,7 @@ namespace BFF.Web.Controllers
                     TransactionId = tranres.TransactionId,
                     AffiliateId = affires.Id,
                     VoucherId= rq.VoucherId,
+                    Status=1,
                 };
                var res = await _mediator.Send(order);
 
@@ -331,6 +332,35 @@ namespace BFF.Web.Controllers
 
                 var res = await _mediator.Send(rq);
                 return Ok(res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"REST request to Create Category fail: {e.Message}");
+
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("Order/UpdateStatus")]
+
+        public async Task<IActionResult> UpdateStatusOrder([FromBody] UpdateStatusRq rq)
+        {
+            _logger.LogInformation($"REST request Create Category : {JsonConvert.SerializeObject(rq)}");
+
+            try
+            {
+                var result = 0;
+                foreach(var i in rq.Id)
+                {
+                    var up = new UpdateStatusOrderCommand
+                    {
+                        Id = i,
+                        Status=rq.Status,
+                    };
+                   var res= await _mediator.Send(up);
+                    result++;
+                }
+                return Ok(result);
             }
             catch (Exception e)
             {
