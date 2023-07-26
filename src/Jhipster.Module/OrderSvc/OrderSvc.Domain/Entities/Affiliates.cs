@@ -9,7 +9,7 @@ namespace OrderSvc.Domain.Entities
     public class Affiliates :BaseEntity<Guid>
     {
         public Guid? ReferrerId { get; set; }
-        public Guid? BuyerId { get; set; }
+        public Guid? ProviderId { get; set; }
         public Guid? SalerId { get; set; }
         public Guid? ParticipantsId { get; set; }
     }

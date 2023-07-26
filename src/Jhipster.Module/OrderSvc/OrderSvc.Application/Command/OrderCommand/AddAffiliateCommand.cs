@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace OrderSvc.Application.Command.OrderCommand
 {
-    public class AddAffiliateCommand :IRequest<int>
+    public class AddAffiliateCommand :IRequest<Affiliates>
     {
         [JsonIgnore]
         public Guid? Id { get; set; }
@@ -21,7 +21,7 @@ namespace OrderSvc.Application.Command.OrderCommand
         public Guid? SalerId { get; set; }
         public Guid? ParticipantsId { get; set; }
     }
-    public class AddAffiliateCommandHandler : IRequestHandler<AddAffiliateCommand, int>
+    public class AddAffiliateCommandHandler : IRequestHandler<AddAffiliateCommand, Affiliates>
     {
         private readonly IMapper _mapper;
         private readonly IOrderRepository _repo;
@@ -31,10 +31,18 @@ namespace OrderSvc.Application.Command.OrderCommand
             _repo = repo;
         }
 
-        public async Task<int> Handle(AddAffiliateCommand rq, CancellationToken cancellationToken)
+        public async Task<Affiliates> Handle(AddAffiliateCommand rq, CancellationToken cancellationToken)
         {
             var res = _mapper.Map<Affiliates>(rq);
-            return await _repo.AddAffi(res);
+            var check = await _repo.AddAffi(res);
+            if(check != 0)
+            {
+               return res;
+            }
+            else
+            {
+                throw new ArgumentException("faild");
+            }
         }
     }
 

@@ -236,6 +236,7 @@ namespace BFF.Web.Controllers
 
             try
             {
+                rq.Id = Guid.NewGuid();
                 // tao phien giao dich
                 var tran = new AddTransactionsCommand
                 {
@@ -255,9 +256,30 @@ namespace BFF.Web.Controllers
                     ParticipantsId= rq.ParticipantsId,
                 };
 
+                
                 var affires = await _mediator.Send(aff);
 
-                return Ok();
+                // Order
+                var order = new CreateOrderCommand
+                {
+                    Id = rq.Id,
+                    BoughtPerson = rq.BoughtPerson,
+                    SalePerson = rq.SalePerson,
+                    TransactionId = tranres.TransactionId,
+                    AffiliateId = affires.Id,
+                    VoucherId= rq.VoucherId,
+                };
+               var res = await _mediator.Send(order);
+
+                // ProductaddOrder
+                var pr = new UpdateProductCommand { 
+                 Id = rq.ProductId,
+                 OrderId=rq.Id,
+                };
+
+                var prores = await _mediator.Send(pr);
+
+                return Ok(res);
             }
             catch (Exception e)
             {

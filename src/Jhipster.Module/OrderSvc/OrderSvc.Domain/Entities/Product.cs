@@ -21,5 +21,7 @@ namespace OrderSvc.Domain.Entities
         public List<string>? Image {  get; set; }
         public string? Decripstion { get; set; }
         public virtual CategoryProduct? CategoryProduct { get; set; }
+        public Guid? OrderId { get; set; }
+        public virtual Order? Order { get; set; }
     }
 }

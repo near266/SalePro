@@ -65,8 +65,23 @@ namespace BFF.Web.Controllers
         {
             try
             {
-
               
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("Member/Create")]
+        public async Task<ActionResult<int>> CreateMember([FromBody] AddProfileCustomerCommand rq)
+        {
+            try
+            {
+
+
                 var res = await _mediator.Send(rq);
                 return Ok(res);
             }

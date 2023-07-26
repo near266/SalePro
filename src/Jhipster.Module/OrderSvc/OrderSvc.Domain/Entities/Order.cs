@@ -13,8 +13,6 @@ namespace OrderSvc.Domain.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        public Guid ProductId { get; set; }
-        public IEnumerable <Product>? Product { get; set; }
         public Guid? SalePerson { get; set; }
         public Guid? BoughtPerson { get; set; }
         public Guid? VoucherId { get; set; }
@@ -22,6 +20,7 @@ namespace OrderSvc.Domain.Entities
         public Transactions? Transactions { get; set; }
         public Guid? AffiliateId {  get; set; }
         public Affiliates? Affiliates { get; set;}
+        public IEnumerable<Product>? Products { get; set; }
 
     }
 }

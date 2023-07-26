@@ -17,7 +17,7 @@ namespace OrderSvc.Application.Command.ProductCommand
     public class UpdateProductCommand :IRequest<ProductDTO>
     {
         public Guid? Id { get; set; }
-      
+        public Guid? OrderId { get; set; }  
        
         public string ProductName { get; set; }
         public double? Price { get; set; }

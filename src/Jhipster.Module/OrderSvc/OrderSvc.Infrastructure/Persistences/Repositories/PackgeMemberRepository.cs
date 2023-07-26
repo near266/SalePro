@@ -23,10 +23,22 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             _mapper = mapper;
         }
 
+        public async Task<int> AddCus(ProfileCustomer customer)
+        {
+         await _Db.profileCustomer.AddAsync(customer);
+          return  await _Db.SaveChangesAsync();
+          
+        }
+
         public async Task<int> AddPackge(PackageMember packageMember)
         {
             await _Db.packageMembers.AddAsync(packageMember);
             return await _Db.SaveChangesAsync();
+        }
+
+        public Task<int> DeleteCus(Guid? Id)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<int> DeletePackge(Guid Id)
@@ -35,6 +47,11 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             if (obj == null) { throw new ArgumentException("not found"); }
             _Db.Remove(obj);
             return await _Db.SaveChangesAsync();
+        }
+
+        public Task<ProfileCustomer> GetDetailCus(Guid? Id)
+        {
+            throw new NotImplementedException();
         }
 
         public  async Task<PagedList<PackageMember>> SearchOrDetail(Guid? Id, string name, int page, int pageSize)
@@ -60,6 +77,11 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                 Data = sQuery1,
                 TotalCount = reslist.Count,
             };
+        }
+
+        public Task<ProfileCustomer> UpdateCus(ProfileCustomer customer)
+        {
+            throw new NotImplementedException();
         }
 
         public  async Task<int> UpdatePackge(PackageMember packageMember)

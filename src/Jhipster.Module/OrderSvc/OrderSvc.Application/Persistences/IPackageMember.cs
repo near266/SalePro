@@ -14,5 +14,11 @@ namespace OrderSvc.Application.Persistences
         Task<int> DeletePackge(Guid Id);
         Task<int>UpdatePackge(PackageMember packageMember);
         Task<PagedList<PackageMember>> SearchOrDetail(Guid? Id,string name , int page , int pageSize);
+
+        Task<int> AddCus(ProfileCustomer customer);
+        Task<ProfileCustomer> UpdateCus(ProfileCustomer customer);
+        Task<int> DeleteCus(Guid? Id);
+        Task<ProfileCustomer> GetDetailCus(Guid? Id);   
+
     }
 }

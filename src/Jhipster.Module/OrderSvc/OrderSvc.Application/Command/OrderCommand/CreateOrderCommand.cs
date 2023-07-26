@@ -16,10 +16,13 @@ namespace OrderSvc.Application.Command.OrderCommand
     {
         [JsonIgnore]
         public Guid Id { get; set; }
-        public Guid ProductId { get; set; }
         public Guid? SalePerson { get; set; }
         public Guid? BoughtPerson { get; set; }
         public string? TransactionId { get; set; }
+        public Guid? AffiliateId { get; set; }
+        public Guid? VoucherId { get; set; }
+
+
     }
     public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Order>
     {
