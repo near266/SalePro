@@ -36,9 +36,15 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             return await _Db.SaveChangesAsync();
         }
 
-        public Task<int> DeleteCus(Guid? Id)
+        public async Task<int> DeleteCus(Guid? Id)
         {
-            throw new NotImplementedException();
+            var obj = await _Db.profileCustomer.FirstOrDefaultAsync(i => i.Id == Id);
+            if (obj == null)
+            {
+                throw new ArgumentException("not found");
+            }
+            _Db.profileCustomer.Remove(obj);
+            return await _Db.SaveChangesAsync();
         }
 
         public async Task<int> DeletePackge(Guid Id)
@@ -49,9 +55,11 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             return await _Db.SaveChangesAsync();
         }
 
-        public Task<ProfileCustomer> GetDetailCus(Guid? Id)
+        public async Task<ProfileCustomer> GetDetailCus(Guid? Id)
         {
-            throw new NotImplementedException();
+            var obj = await _Db.profileCustomer.Include(i=>i.Company).FirstOrDefaultAsync(i => i.Id == Id);
+            if (obj == null) { return new ProfileCustomer(); }
+            return obj;
         }
 
         public  async Task<PagedList<PackageMember>> SearchOrDetail(Guid? Id, string name, int page, int pageSize)
@@ -79,9 +87,37 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             };
         }
 
-        public Task<ProfileCustomer> UpdateCus(ProfileCustomer customer)
+        public async Task<PagedList<ProfileCustomer>> SearchOrDetail(string? name, int page, int pageSize)
         {
-            throw new NotImplementedException();
+            var query = _Db.profileCustomer.AsQueryable();
+
+            if (name != null)
+            {
+                query = query.Where(i => !string.IsNullOrEmpty(i.CustomerName) && i.CustomerName.ToLower().Contains(name.ToLower().Trim()));
+
+            }
+
+            var sQuery = query;
+            var sQuery1 = await sQuery.Skip(pageSize * (page - 1))
+                                .Take(pageSize)
+                                .ToListAsync();
+            var reslist = await sQuery.ToListAsync();
+            return new PagedList<ProfileCustomer>
+            {
+                Data = sQuery1,
+                TotalCount = reslist.Count,
+            };
+        }
+
+        public async Task<int> UpdateCus(ProfileCustomer customer)
+        {
+            var obj = await _Db.profileCustomer.FirstOrDefaultAsync(i=>i.Id.Equals(customer.Id));
+            if (obj != null)
+            {
+                _mapper.Map(obj,customer);
+                return await _Db.SaveChangesAsync();
+            }
+            return 0;
         }
 
         public  async Task<int> UpdatePackge(PackageMember packageMember)

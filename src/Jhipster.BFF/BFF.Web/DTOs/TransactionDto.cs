@@ -13,7 +13,7 @@ namespace BFF.Web.DTOs
 
         [JsonIgnore]
         public Guid Id { get; set; }
-        public Guid? ProductId { get; set; }
+        public List<Guid>? ProductId { get; set; }
         public Guid? SalePerson { get; set; }
         public Guid? BoughtPerson { get; set; }
         public Guid? VoucherId { get; set; }
@@ -26,6 +26,7 @@ namespace BFF.Web.DTOs
         public Guid? AffiliateId { get; set; }
 
 
+        public double? TotalAmount { get; set; }
 
         public string? TransactionName { get; set; }
         public string TransactionType { get; set; }

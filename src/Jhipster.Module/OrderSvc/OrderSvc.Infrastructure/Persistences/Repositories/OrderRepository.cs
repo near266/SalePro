@@ -39,9 +39,70 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Order> GetOrderById(Guid id)
+        public async Task<OrderResponse> GetOrderById(Guid id)
         {
-            throw new NotImplementedException();
+            var trsQr = _Db.Transactions.AsQueryable();
+            var User = _Db.profileCustomer.AsQueryable();
+            var pro =await _Db.products.Where(i=>i.OrderId==id).Select(i=>new product
+            {
+                Id=i.Id,
+                ProductName=i.ProductName,
+                price=i.Price,
+                CateId=i.CategoryProduct.CategoryId,
+                CateName= _Db.categories.Where(a=>a.Id.Equals(i.CategoryProduct.Id)).Select(a=>a.CategoryName).FirstOrDefault(),
+            }).ToListAsync();
+            var order = _Db.orders.Where(i => i.Id == id).AsQueryable();
+            var check = order.FirstOrDefault();
+            var AffiQr=_Db.affiliates.Where(a => a.Id.Equals(check.AffiliateId)).FirstOrDefault();
+            var prod = new ProductDTOs { 
+                quantity=pro.Count(),
+                products=pro,
+            };
+            List<Guid>? listProId= pro.Select(a=>(Guid) a.Id).ToList();
+            var v = order.Select(i=>i.VoucherId).SingleOrDefault();
+            var fee = Price(listProId,v);
+            
+            var payment = new Payment { 
+                total=fee.Result.TotalPrice,
+                discount=fee.Result.PriceVoucher,
+                finalPrice=fee.Result.RealPice,
+            };
+
+            var affi = order.Select(i => new AffiliateDTO
+            {
+                SalerId=AffiQr.SalerId,
+                SalerName=User.Where(a=>a.Id.Equals(AffiQr.SalerId)).Select(a=>a.CustomerName).FirstOrDefault(),
+                ProviderId=AffiQr.ProviderId,
+                ProviderName= User.Where(a => a.Id.Equals(AffiQr.ProviderId)).Select(a => a.CustomerName).FirstOrDefault(),
+                ParticipantsId=AffiQr.ParticipantsId,
+                ParticipantsName= User.Where(a => a.Id.Equals(AffiQr.ParticipantsId)).Select(a => a.CustomerName).FirstOrDefault(),
+                ReferrerId=AffiQr.ReferrerId,
+                ReferrerName= User.Where(a => a.Id.Equals(AffiQr.ReferrerId)).Select(a => a.CustomerName).FirstOrDefault(),
+
+            }).SingleOrDefault();
+
+            var obj = order
+               .Select(i => new OrderResponse
+                {
+                    Id= i.Id,
+                    TransactionId= i.TransactionId,
+                    TransactionDate=trsQr.Where(a=>a.TransactionId.Equals(i.TransactionId)).Select(a=>a.TransactionDate).FirstOrDefault(),
+                    TransactionName= trsQr.Where(a => a.TransactionId.Equals(i.TransactionId)).Select(a => a.TransactionName).FirstOrDefault(),
+                    SalePerson =i.SalePerson,
+                    SalerName =User.Where(a=>a.Id.Equals(i.SalePerson)).Select(a=>a.CustomerName).FirstOrDefault(),
+                    BoughtPerson=i.BoughtPerson,
+                    BoughtPersonName= User.Where(a => a.Id.Equals(i.BoughtPerson)).Select(a => a.CustomerName).FirstOrDefault(),
+                    TotalAmount= trsQr.Where(a => a.TransactionId.Equals(i.TransactionId)).Select(a => a.TotalAmount).FirstOrDefault(),
+                    PaymentMethod= trsQr.Where(a => a.TransactionId.Equals(i.TransactionId)).Select(a => a.PaymentMethod).FirstOrDefault(),
+                    TransactionType= trsQr.Where(a => a.TransactionId.Equals(i.TransactionId)).Select(a =>a.TransactionType).FirstOrDefault(),
+                    affiliate=affi,
+                    product=prod,
+                    payment=payment
+
+                })
+                .AsNoTracking();
+
+            return obj.SingleOrDefault(); 
         }
 
         public async Task<PriceDto> Price(List<Guid>? ProductId, Guid? VoucherId)
@@ -60,7 +121,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                 }
             }
           
-            voucher = v != null ? total - total *(double) v.Discount : 0;
+            voucher = v != null ? total *((double) v.Discount /100): 0;
 
             price = total - voucher;
             return new PriceDto { 

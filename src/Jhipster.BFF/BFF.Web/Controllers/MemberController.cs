@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using OrderSvc.Application.Command.PackageCommand;
 using OrderSvc.Application.Command.ProductCommand;
+using OrderSvc.Application.Query.PackageMemberQuery;
 using OrderSvc.Controller;
 using System;
 using System.Collections.Generic;
@@ -77,6 +78,66 @@ namespace BFF.Web.Controllers
 
         [HttpPost("Member/Create")]
         public async Task<ActionResult<int>> CreateMember([FromBody] AddProfileCustomerCommand rq)
+        {
+            try
+            {
+
+
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+        [HttpDelete("Member/Delete")]
+        public async Task<ActionResult<int>> DeleteMember([FromBody] DeleteCustomerCommand rq)
+        {
+            try
+            {
+
+
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPut("Member/Update")]
+        public async Task<ActionResult<int>> UpdateMember([FromBody] UpdateCustomerCommand rq)
+        {
+            try
+            {
+
+
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpGet("Member/GetDetail")]
+        public async Task<ActionResult<int>> DetailMember([FromQuery] ViewDetailCustomerQuery rq)
+        {
+            try
+            {
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+        [HttpPost("Member/GetAllOrSearch")]
+        public async Task<IActionResult> SearchMember([FromBody] GetAllOrSearchQuery rq)
         {
             try
             {

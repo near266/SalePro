@@ -12,6 +12,7 @@ using BFF.Web.DTOs;
 using OrderSvc.Application.Query.CompanyQuery;
 using OrderSvc.Application.Command.OrderCommand;
 using OrderSvc.Application.Command.TransactionsCommand;
+using OrderSvc.Application.Query.OrderQuery;
 
 namespace BFF.Web.Controllers
 {
@@ -227,7 +228,30 @@ namespace BFF.Web.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+        [HttpPost("Order/Price")]
 
+        public async Task<IActionResult> OrderPrice([FromBody] DoPriceCommand rq)
+        {
+            _logger.LogInformation($"REST request Create Category : {JsonConvert.SerializeObject(rq)}");
+
+            try
+            {
+
+
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"REST request to Create Category fail: {e.Message}");
+
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Tạo giao dịch
+        /// </summary>
         [HttpPost("Order/Create")]
 
         public async Task<IActionResult> CreatOrder([FromBody] TransactionDto rq)
@@ -244,6 +268,8 @@ namespace BFF.Web.Controllers
                     TransactionType= rq.TransactionType,
                     TransactionDate= rq.TransactionDate,
                     PaymentMethod= rq.PaymentMethod,
+                    TotalAmount= rq.TotalAmount,
+
 
                 };
               var tranres=  await _mediator.Send(tran);
@@ -272,12 +298,16 @@ namespace BFF.Web.Controllers
                var res = await _mediator.Send(order);
 
                 // ProductaddOrder
+                foreach(var p in rq.ProductId)
+                {
+
                 var pr = new UpdateProductCommand { 
-                 Id = rq.ProductId,
+                 Id = p,
                  OrderId=rq.Id,
                 };
-
                 var prores = await _mediator.Send(pr);
+                }
+
 
                 return Ok(res);
             }
@@ -288,6 +318,25 @@ namespace BFF.Web.Controllers
                 return StatusCode(500, e.Message);
 
 
+            }
+        }
+        [HttpPost("Order/Detail")]
+
+        public async Task<IActionResult> OrderDetail([FromBody] ViewDetailOrderQuery rq)
+        {
+            _logger.LogInformation($"REST request Create Category : {JsonConvert.SerializeObject(rq)}");
+
+            try
+            {
+
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"REST request to Create Category fail: {e.Message}");
+
+                return StatusCode(500, e.Message);
             }
         }
     }

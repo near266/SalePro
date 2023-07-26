@@ -20,6 +20,7 @@ namespace OrderSvc.Domain.Entities
         public Transactions? Transactions { get; set; }
         public Guid? AffiliateId {  get; set; }
         public Affiliates? Affiliates { get; set;}
+        public int? Status { get; set; }
         public IEnumerable<Product>? Products { get; set; }
 
     }

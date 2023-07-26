@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿ using AutoMapper;
 using InteractiveSvc.Infrastructure.Persistences;
 using Jhipster.Service.Utilities;
 using MediatR;

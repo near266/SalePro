@@ -14,7 +14,7 @@ namespace OrderSvc.Domain.Entities
         public string TransactionId { get; set; } = RandomUtil.GenerateKey();
         public string? TransactionName { get; set; } 
         public string TransactionType { get; set; }
-        public decimal? TotalAmount { get; set; }
+        public double? TotalAmount { get; set; }
        
         public DateTime? TransactionDate { get; set; }
         public string? PaymentMethod { get; set; }
