@@ -44,6 +44,10 @@ namespace OrderSvc.Share.DTO
         public string? ParticipantsName { get; set; }
         public double? ParticiantsRevenue { get; set; }
 
+        public string? Ecosystem { get; set; }
+
+
+
     }
     public class ProductDTOs
     {
