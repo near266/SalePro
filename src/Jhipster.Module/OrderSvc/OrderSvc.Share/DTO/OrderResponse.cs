@@ -56,7 +56,9 @@ namespace OrderSvc.Share.DTO
     { 
       public Guid? Id { get; set; }
       public string? ProductName { get; set; }
-      public double? price { get; set; }
+      public List<string>? Image {  get; set; }
+
+        public double? price { get; set; }
       public Guid? CateId { get;set; }   
       public string? CateName { get; set; } 
       
@@ -68,4 +70,5 @@ namespace OrderSvc.Share.DTO
         public double? finalPrice { get; set; }
 
     }
+
 }

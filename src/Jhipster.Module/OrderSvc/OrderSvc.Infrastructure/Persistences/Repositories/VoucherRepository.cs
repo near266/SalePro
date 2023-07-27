@@ -66,6 +66,8 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             {
                 Data = sQuery1,
                 TotalCount = reslist.Count,
+                Page = page,
+                PageSize= pageSize
             };
         }
 

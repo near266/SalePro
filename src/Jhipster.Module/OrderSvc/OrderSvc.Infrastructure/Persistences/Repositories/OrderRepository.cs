@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using InteractiveSvc.Infrastructure.Persistences;
+using Jhipster.Infrastructure.Migrations;
+using Jhipster.Service.Utilities;
 using Microsoft.EntityFrameworkCore;
 using OrderSvc.Application.Persistences;
 using OrderSvc.Domain.Entities;
@@ -7,12 +9,16 @@ using OrderSvc.Share.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.Xml;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace OrderSvc.Infrastructure.Persistences.Repositories
 {
-     public class OrderRepository :IOrderRepository
+
+    public class OrderRepository :IOrderRepository
     {
         private readonly OrderSvcDbContext _Db;
         private readonly IMapper _mapper;
@@ -47,6 +53,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             {
                 Id=i.Id,
                 ProductName=i.ProductName,
+                Image=i.Image,
                 price=i.Price,
                 CateId=i.CategoryProduct.CategoryId,
                 CateName= _Db.categories.Where(a=>a.Id.Equals(i.CategoryProduct.Id)).Select(a=>a.CategoryName).FirstOrDefault(),
@@ -78,6 +85,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                 ParticipantsName= User.Where(a => a.Id.Equals(AffiQr.ParticipantsId)).Select(a => a.CustomerName).FirstOrDefault(),
                 ReferrerId=AffiQr.ReferrerId,
                 ReferrerName= User.Where(a => a.Id.Equals(AffiQr.ReferrerId)).Select(a => a.CustomerName).FirstOrDefault(),
+                Ecosystem=AffiQr.Ecosystem,
 
             }).SingleOrDefault();
 
@@ -130,6 +138,89 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                 RealPice=price,
             };
 
+        }
+        
+        public async Task<Payment> PriceId(Guid id)
+        {
+            var proid = await _Db.products.Where(i=>i.OrderId == id).Select(i=>i.Id).ToListAsync();
+            var voucherid = await _Db.orders.Where(i => i.Id == id).Select(i => i.VoucherId).FirstOrDefaultAsync();
+            List<Guid> lisId= proid.ToList();
+            var v = _Db.vouchers.Where(i => i.Id == voucherid).FirstOrDefault();
+            var pro =  _Db.products.Where(i => lisId.Contains(i.Id)).ToList();
+
+            var res = new PriceDto();
+            double? total = 0;
+            double? voucher = 0;
+            double? price = 0;
+            foreach (var item in pro)
+            {
+                if (item.Price != null)
+                {
+                    total += item.Price;
+                }
+            }
+
+            voucher = v != null ? total * ((double)v.Discount / 100) : 0;
+
+            price = total - voucher;
+
+            return new Payment
+            {
+                total = total,
+                discount = voucher,
+                finalPrice = price,
+            };
+
+        }
+       
+
+        public  async Task<PagedList<SearchOrder>> SearchOrder(string? name,int? status, int page, int pageSize)
+        {
+            var query = _Db.orders.Include(i => i.Products).AsQueryable();
+            if (name != null)
+            {
+            var queryPro = _Db.products
+                .Where(i=>i.ProductName.ToLower().Trim().Equals(name.ToLower().Trim()))
+                .AsQueryable();
+            var orderId = queryPro.Select(i=>i.OrderId).ToList();
+                query = query.Where(i=>orderId.Contains(i.Id));
+            }
+            if(status != null)
+            {
+                query=query.Where(i=>i.Status == status);
+            }
+
+            var result = await query.Select(i => new SearchOrder
+            {
+            Id = i.Id,
+            TransactionId= i.TransactionId,
+            ProductDTOs= new ProductDTOs
+            {
+                products= _Db.products.Where(a=>a.OrderId.Equals(i.Id)).Select(a=> new product
+                {
+                    Id=a.Id, 
+                    ProductName=a.ProductName,
+                    Image=a.Image,
+                    price=a.Price,
+                    CateId=a.CategoryProduct.CategoryId,
+                    CateName=a.CategoryProduct.Category.CategoryName,
+                }).ToList(),
+                quantity= _Db.products.Where(a => a.OrderId.Equals(i.Id)).Count(),
+                
+            },
+
+             
+
+
+            }).ToListAsync();
+
+            return new PagedList<SearchOrder>
+            {
+                Data = result,
+                TotalCount = result.Count(),
+                Page = page,
+                PageSize = pageSize,
+            };
         }
 
         public async Task<int> UpdateOrder(Order order, CancellationToken cancellationToken)

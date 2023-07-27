@@ -22,5 +22,6 @@ namespace OrderSvc.Domain.Entities
         {
             get; set;
         }
+        public List<string>? coverImage { get; set; }
     }
 }

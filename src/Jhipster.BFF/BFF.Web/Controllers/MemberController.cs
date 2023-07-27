@@ -20,10 +20,10 @@ namespace BFF.Web.Controllers
     public class MemberController :ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly ILogger<TransactionsController> _logger;
+        private readonly ILogger<MemberController> _logger;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
-        public MemberController(IConfiguration configuration, ILogger<TransactionsController> logger, IMapper mapper, IMediator mediator)
+        public MemberController(IConfiguration configuration, ILogger<MemberController> logger, IMapper mapper, IMediator mediator)
         {
             _configuration = configuration;
             _logger = logger;

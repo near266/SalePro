@@ -266,7 +266,7 @@ namespace BFF.Web.Controllers
                 {
                     TransactionName= rq.TransactionName,
                     TransactionType= rq.TransactionType,
-                    TransactionDate= rq.TransactionDate,
+                    TransactionDate= rq.TransactionDate== null? DateTime.Now : rq.TransactionDate,
                     PaymentMethod= rq.PaymentMethod,
                     TotalAmount= rq.TotalAmount,
 
@@ -309,8 +309,13 @@ namespace BFF.Web.Controllers
                 var prores = await _mediator.Send(pr);
                 }
 
+                var view = new ViewDetailOrderQuery
+                {
+                    Id = rq.Id,
+                };
+                var result = await _mediator.Send(view);
 
-                return Ok(res);
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -331,6 +336,35 @@ namespace BFF.Web.Controllers
             {
 
                 var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"REST request to Create Category fail: {e.Message}");
+
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("Order/SearchOrGetall")]
+
+        public async Task<IActionResult> SearchOrGetAll([FromBody] SearchOrGetAllQuery rq)
+        {
+            _logger.LogInformation($"REST request Create Category : {JsonConvert.SerializeObject(rq)}");
+
+            try
+            {
+
+                var res = await _mediator.Send(rq);
+                foreach(var item in res.Data)
+                {
+                var p = new PriceIdComand { Id=item.Id };
+                 var price = await _mediator.Send(p);
+                    item.total = price.total;
+                    item.discount= price.discount;
+                    item.finalPrice= price.finalPrice;
+                }
+
                 return Ok(res);
             }
             catch (Exception e)

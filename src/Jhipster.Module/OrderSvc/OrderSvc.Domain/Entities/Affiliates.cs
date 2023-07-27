@@ -12,5 +12,6 @@ namespace OrderSvc.Domain.Entities
         public Guid? ProviderId { get; set; }
         public Guid? SalerId { get; set; }
         public Guid? ParticipantsId { get; set; }
+        public string? Ecosystem { get;set; }
     }
 }

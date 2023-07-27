@@ -92,7 +92,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             
             });
 
-            var sQuery1 = await sQuery.Skip(pageSize * (page - 1))
+            var sQuery1 = await sQuery.OrderBy(i=>i.ProductName).Skip(pageSize * (page - 1))
                                 .Take(pageSize)
                                 .ToListAsync();
             var reslist = await sQuery.ToListAsync();
@@ -100,6 +100,8 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             {
                 Data = sQuery1,
                 TotalCount = reslist.Count,
+                Page=page,
+                PageSize = pageSize,
             };
 
         }

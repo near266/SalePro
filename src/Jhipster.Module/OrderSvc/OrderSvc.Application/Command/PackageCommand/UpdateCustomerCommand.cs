@@ -28,6 +28,8 @@ namespace OrderSvc.Application.Command.PackageCommand
         {
             get; set;
         }
+        public List<string>? coverImage { get; set; }
+
     }
     public class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustomerCommand, ProfileCustomer>
     {

@@ -22,6 +22,7 @@ namespace OrderSvc.Application.Command.TransactionsCommand
 		public double? TotalAmount { get; set; }
 		public DateTime? TransactionDate { get; set; }
 		public string? PaymentMethod { get; set; }
+
 	}
 	public class AddTransactionsCommandHandler : IRequestHandler<AddTransactionsCommand, Transactions>
 	{
