@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Jhipster.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Jhipster.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    partial class ApplicationDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230728042037_logobrand")]
+    partial class logobrand
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -556,9 +558,6 @@ namespace Jhipster.Infrastructure.Migrations
                         .HasMaxLength(2147483647)
                         .HasColumnType("text");
 
-                    b.Property<string>("Bio")
-                        .HasColumnType("text");
-
                     b.Property<Guid?>("CompanyId")
                         .HasColumnType("uuid");
 
@@ -573,13 +572,7 @@ namespace Jhipster.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("DOB")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<string>("Decripstion")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
                         .HasColumnType("text");
 
                     b.Property<string>("LastModifiedBy")
@@ -589,24 +582,11 @@ namespace Jhipster.Infrastructure.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
                     b.Property<string>("Position")
                         .HasColumnType("text");
 
-                    b.Property<int?>("Role")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("coverImage")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("memberShip")
-                        .HasColumnType("integer");
+                    b.Property<List<string>>("coverImage")
+                        .HasColumnType("text[]");
 
                     b.HasKey("Id");
 

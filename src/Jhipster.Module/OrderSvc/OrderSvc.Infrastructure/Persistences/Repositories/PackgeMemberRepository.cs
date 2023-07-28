@@ -2,6 +2,7 @@
 using InteractiveSvc.Infrastructure.Persistences;
 using Jhipster.Service.Utilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using OrderSvc.Application.Persistences;
 using OrderSvc.Domain.Entities;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OrderSvc.Infrastructure.Persistences.Repositories
@@ -17,17 +19,29 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
     {
         private readonly OrderSvcDbContext _Db;
         private readonly IMapper _mapper;
-        public PackgeMemberRepository(OrderSvcDbContext db, IMapper mapper)
+        private readonly ILogger<PackgeMemberRepository> _logger;
+
+        public PackgeMemberRepository(OrderSvcDbContext db, IMapper mapper,ILogger<PackgeMemberRepository> logger)
         {
             _Db = db;
             _mapper = mapper;
+            _logger = logger;
         }
 
-        public async Task<int> AddCus(ProfileCustomer customer)
+        public async Task<ProfileCustomer> AddCus(ProfileCustomer user)
         {
-         await _Db.profileCustomer.AddAsync(customer);
-          return  await _Db.SaveChangesAsync();
-          
+            var check = await _Db.profileCustomer.Where(m => m.Username.ToUpper() == user.Username.ToUpper()).FirstOrDefaultAsync();
+            if (check != null) _logger.LogError("Already Existed");
+            user.CustomerName = user.Username;
+            user.Role = 0;
+            user.Avatar = "https://cdn.eztek.net/TrueConnect/Images/AvatarDefault_638191530952395772_ORIGIN.png";
+            user.coverImage = "https://cdn.eztek.net/TrueConnect/Images/default-cover_638241704781692527_ORIGIN.png";
+            user.CreatedDate = DateTime.Now;
+            user.LastModifiedDate = DateTime.Now;
+            await _Db.profileCustomer.AddAsync(user);
+            await _Db.SaveChangesAsync();
+            return user;
+
         }
 
         public async Task<int> AddPackge(PackageMember packageMember)
@@ -112,15 +126,17 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             };
         }
 
-        public async Task<int> UpdateCus(ProfileCustomer customer)
+        public async Task<ProfileCustomer> UpdateCus(ProfileCustomer customer)
         {
             var obj = await _Db.profileCustomer.FirstOrDefaultAsync(i=>i.Id.Equals(customer.Id));
             if (obj != null)
             {
                 _mapper.Map(obj,customer);
-                return await _Db.SaveChangesAsync();
+                customer.LastModifiedDate = DateTime.UtcNow;
+                await _Db.SaveChangesAsync();
+                return customer;
             }
-            return 0;
+            return new ProfileCustomer();
         }
 
         public  async Task<int> UpdatePackge(PackageMember packageMember)

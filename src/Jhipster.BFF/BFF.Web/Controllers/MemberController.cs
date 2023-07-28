@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -91,7 +92,37 @@ namespace BFF.Web.Controllers
                 return StatusCode(500, e.Message);
             }
         }
-        [HttpDelete("Member/Delete")]
+        [HttpGet("user/current")]
+        [Authorize]
+        public async Task<IActionResult> UserCurrent()
+        {
+            try
+            {
+                try
+                {
+                    var create = new AddProfileCustomerCommand();
+                    create.Id = Guid.Parse(GetUserIdFromContext());
+                    create.Username = GetUsernameFromContext();
+                    var rep = await _mediator.Send(create);
+                }
+                catch
+                {
+                    _logger.LogError("Sth wrong to create");
+                }
+
+                var command = new ViewDetailCustomerQuery();
+                command.Id = Guid.Parse(GetUserIdFromContext());
+                var response = await _mediator.Send(command);
+
+
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+                [HttpDelete("Member/Delete")]
         public async Task<ActionResult<int>> DeleteMember([FromBody] DeleteCustomerCommand rq)
         {
             try

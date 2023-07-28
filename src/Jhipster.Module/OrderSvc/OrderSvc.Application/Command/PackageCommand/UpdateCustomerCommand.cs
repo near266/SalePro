@@ -14,21 +14,27 @@ namespace OrderSvc.Application.Command.PackageCommand
 {
     public class UpdateCustomerCommand :IRequest<ProfileCustomer>
     {
-        public Guid? Id { get; set; }
+        [JsonIgnore]
+        public Guid Id { get; set; }
         public string CustomerName { get; set; }
+        public string Username { get; set; }
+        public DateTime? DOB { get; set; }
+
         public Guid? CompanyId { get; set; }
+
         [JsonIgnore]
         public Company? Company { get; set; }
         public string? Position { get; set; }
-
         public string? Decripstion { get; set; }
 
         [MaxLength(int.MaxValue)]
-        public string? Avatar
-        {
-            get; set;
-        }
-        public List<string>? coverImage { get; set; }
+        public string? Avatar { get; set; }
+        public string? coverImage { get; set; }
+        public string? Email { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Bio { get; set; }
+        public int? Role { get; set; }
+        public int? memberShip { get; set; }
 
     }
     public class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustomerCommand, ProfileCustomer>
@@ -45,14 +51,7 @@ namespace OrderSvc.Application.Command.PackageCommand
         {
             var res = _mapper.Map<ProfileCustomer>(rq);
             var check = await _repo.UpdateCus(res);
-            if (check != 0)
-            {
-                return res;
-            }
-            else
-            {
-                throw new ArgumentException(" fail");
-            }
+          return check;
         }
     }
 }
