@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace OrderSvc.Application.Command.CompanyCommand
 {
-    public class CreateCompanyCommand : IRequest<int>
+    public class CreateCompanyCommand : IRequest<Company>
     {
      [JsonIgnore]   public Guid Id { get; set; }
         public string CompanyName { get; set; }
@@ -25,7 +25,7 @@ namespace OrderSvc.Application.Command.CompanyCommand
             get; set;
         }
     }
-    public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand, int>
+    public class CreateCompanyCommandHandler : IRequestHandler<CreateCompanyCommand, Company>
     {
         private readonly IMapper _mapper;
         private readonly  ICompanyReqository _repo;
@@ -35,10 +35,17 @@ namespace OrderSvc.Application.Command.CompanyCommand
             _repo = repo;
         }
 
-        public async Task<int> Handle(CreateCompanyCommand rq, CancellationToken cancellationToken)
+        public async Task<Company> Handle(CreateCompanyCommand rq, CancellationToken cancellationToken)
         {
             var res = _mapper.Map<Company>(rq);
-            return await _repo.Add(res);
+           var check =await _repo.Add(res);
+            if (check!=0){
+                return res;
+            }
+            else
+            {
+                throw new ArgumentException("fail");
+            }
         }
     }
 }

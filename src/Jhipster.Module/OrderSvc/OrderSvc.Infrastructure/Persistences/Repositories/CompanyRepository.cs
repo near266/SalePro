@@ -47,7 +47,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             return obj;
         }
 
-        public async Task<PagedList< Company>> Search(string? name, int page, int pageSize)
+        public async Task<PagedList<Company>> Search(string? name, int page, int pageSize)
         {
             var query = _Db.companies.AsQueryable();
             if (name != null)
@@ -55,7 +55,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                 query = query.Where(i => !string.IsNullOrEmpty(i.CompanyName) && i.CompanyName.ToLower().Contains(name.ToLower().Trim()));
 
             }
-            var sQuery = query.Include(i => i.Customer).Include(i=>i.Products);
+            var sQuery = query.Include(i=>i.Products);
             var sQuery1 = await sQuery.Skip(pageSize * (page - 1))
                                 .Take(pageSize)
                                 .ToListAsync();

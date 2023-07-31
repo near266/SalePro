@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OrderSvc.Domain.Entities
@@ -12,13 +13,11 @@ namespace OrderSvc.Domain.Entities
         public string CustomerName { get; set; }
         public string Username { get; set; }
         public DateTime? DOB { get; set; }
-        
+        [JsonIgnore]
         public Guid? CompanyId { get; set; }
-        public Company? Company { get; set; }
         public string? Position { get; set; }
         public string? Decripstion { get; set; }
 
-        [MaxLength(int.MaxValue)]
         public string? Avatar {get; set; }
         public string? coverImage { get; set; }
         public string? Email { get; set; }

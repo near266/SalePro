@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace OrderSvc.Application.Command.PackageCommand
 {
-    public class UpdateCustomerCommand :IRequest<ProfileCustomer>
+    public class UpdateCustomerCommand :IRequest<int>
     {
         [JsonIgnore]
         public Guid Id { get; set; }
@@ -37,7 +37,7 @@ namespace OrderSvc.Application.Command.PackageCommand
         public int? memberShip { get; set; }
 
     }
-    public class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustomerCommand, ProfileCustomer>
+    public class UpdateCustomerCommandHandler : IRequestHandler<UpdateCustomerCommand, int>
     {
         private readonly IMapper _mapper;
         private readonly IPackageMember _repo;
@@ -47,7 +47,7 @@ namespace OrderSvc.Application.Command.PackageCommand
             _repo = repo;
         }
 
-        public async Task<ProfileCustomer> Handle(UpdateCustomerCommand rq, CancellationToken cancellationToken)
+        public async Task<int> Handle(UpdateCustomerCommand rq, CancellationToken cancellationToken)
         {
             var res = _mapper.Map<ProfileCustomer>(rq);
             var check = await _repo.UpdateCus(res);

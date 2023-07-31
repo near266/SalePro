@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Jhipster.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Jhipster.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    partial class ApplicationDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230731174811_delFK")]
+    partial class delFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -609,8 +611,6 @@ namespace Jhipster.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CompanyId");
-
                     b.ToTable("profileCustomer");
                 });
 
@@ -836,13 +836,6 @@ namespace Jhipster.Infrastructure.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("OrderSvc.Domain.Entities.ProfileCustomer", b =>
-                {
-                    b.HasOne("OrderSvc.Domain.Entities.Company", null)
-                        .WithMany("Customer")
-                        .HasForeignKey("CompanyId");
-                });
-
             modelBuilder.Entity("OrderSvc.Domain.Entities.VoucherProductCustomer", b =>
                 {
                     b.HasOne("OrderSvc.Domain.Entities.Product", "Product")
@@ -876,8 +869,6 @@ namespace Jhipster.Infrastructure.Migrations
 
             modelBuilder.Entity("OrderSvc.Domain.Entities.Company", b =>
                 {
-                    b.Navigation("Customer");
-
                     b.Navigation("Products");
                 });
 

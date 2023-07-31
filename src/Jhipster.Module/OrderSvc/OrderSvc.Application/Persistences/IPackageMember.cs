@@ -1,5 +1,6 @@
 ﻿using Jhipster.Service.Utilities;
 using OrderSvc.Domain.Entities;
+using OrderSvc.Share.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,10 @@ namespace OrderSvc.Application.Persistences
         Task<PagedList<PackageMember>> SearchOrDetail(Guid? Id,string name , int page , int pageSize);
 
         Task<ProfileCustomer> AddCus(ProfileCustomer customer);
-        Task<ProfileCustomer> UpdateCus(ProfileCustomer customer);
+        Task<int> UpdateCus(ProfileCustomer customer);
         Task<int> DeleteCus(Guid? Id);
-        Task<PagedList<ProfileCustomer>> SearchOrDetail(string? name , int page , int pageSize);
-        Task<ProfileCustomer> GetDetailCus(Guid? Id);   
+        Task<PagedList<userResponse>> SearchOrDetail(string? name , int page , int pageSize);
+        Task<userResponse> GetDetailCus(Guid? Id);   
 
     }
 }

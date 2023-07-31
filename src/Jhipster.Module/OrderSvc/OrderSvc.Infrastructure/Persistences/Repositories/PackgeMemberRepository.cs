@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using OrderSvc.Application.Persistences;
 using OrderSvc.Domain.Entities;
+using OrderSvc.Share.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +34,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             var check = await _Db.profileCustomer.Where(m => m.Username.ToUpper() == user.Username.ToUpper()).FirstOrDefaultAsync();
             if (check != null) _logger.LogError("Already Existed");
             user.CustomerName = user.Username;
+            user.memberShip = 0;
             user.Role = 0;
             user.Avatar = "https://cdn.eztek.net/TrueConnect/Images/AvatarDefault_638191530952395772_ORIGIN.png";
             user.coverImage = "https://cdn.eztek.net/TrueConnect/Images/default-cover_638241704781692527_ORIGIN.png";
@@ -69,10 +71,15 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             return await _Db.SaveChangesAsync();
         }
 
-        public async Task<ProfileCustomer> GetDetailCus(Guid? Id)
+        public async Task<userResponse> GetDetailCus(Guid? Id)
         {
-            var obj = await _Db.profileCustomer.Include(i=>i.Company).FirstOrDefaultAsync(i => i.Id == Id);
-            if (obj == null) { return new ProfileCustomer(); }
+            var obj = await _Db.profileCustomer.Where(i=>i.Id.Equals(Id)).Select(i=> new userResponse()
+            {
+                profileCustomer = _Db.profileCustomer.Where(i => i.Id.Equals(Id)).SingleOrDefault(),
+                products = _Db.products.Where(a => a.CompanyId.Equals(i.CompanyId)).Select(a => a.ProductName).ToList(),
+                CompanyName = _Db.companies.Where(a => a.Id.Equals(i.CompanyId)).Select(a => a.CompanyName).FirstOrDefault(),
+            }).FirstOrDefaultAsync();
+            if (obj == null) { throw new ArgumentNullException("not found"); }
             return obj;
         }
 
@@ -101,7 +108,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             };
         }
 
-        public async Task<PagedList<ProfileCustomer>> SearchOrDetail(string? name, int page, int pageSize)
+        public async Task<PagedList<userResponse>> SearchOrDetail(string? name, int page, int pageSize)
         {
             var query = _Db.profileCustomer.AsQueryable();
 
@@ -112,11 +119,19 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             }
 
             var sQuery = query;
-            var sQuery1 = await sQuery.Skip(pageSize * (page - 1))
+            var sQuery1 = await sQuery
+                .Select( i=>new userResponse()
+                {
+                    profileCustomer= sQuery.SingleOrDefault(),
+                    products=_Db.products.Where(a=>a.CompanyId.Equals(i.CompanyId)).Select(a=>a.ProductName).ToList(),
+                    CompanyName= _Db.companies.Where(a=>a.Id.Equals(i.CompanyId)).Select(a=>a.CompanyName).FirstOrDefault(),
+                })
+                .Skip(pageSize * (page - 1))
+
                                 .Take(pageSize)
                                 .ToListAsync();
             var reslist = await sQuery.ToListAsync();
-            return new PagedList<ProfileCustomer>
+            return new PagedList<userResponse>
             {
                 Data = sQuery1,
                 TotalCount = reslist.Count,
@@ -126,17 +141,17 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             };
         }
 
-        public async Task<ProfileCustomer> UpdateCus(ProfileCustomer customer)
+        public async Task<int> UpdateCus(ProfileCustomer customer)
         {
             var obj = await _Db.profileCustomer.FirstOrDefaultAsync(i=>i.Id.Equals(customer.Id));
             if (obj != null)
             {
-                _mapper.Map(obj,customer);
+                _mapper.Map(customer, obj);
                 customer.LastModifiedDate = DateTime.UtcNow;
-                await _Db.SaveChangesAsync();
-                return customer;
+               return await _Db.SaveChangesAsync();
+               
             }
-            return new ProfileCustomer();
+            return -1;
         }
 
         public  async Task<int> UpdatePackge(PackageMember packageMember)
@@ -144,7 +159,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             var obj = await _Db.categories.FindAsync(packageMember.Id);
             if (obj != null)
             {
-                _mapper.Map(obj, packageMember);
+                _mapper.Map(packageMember, obj);
                 return await _Db.SaveChangesAsync();
             }
             return 0;

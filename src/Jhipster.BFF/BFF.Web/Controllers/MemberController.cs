@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
+using BFF.Web.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
+using OrderSvc.Application.Command.CompanyCommand;
 using OrderSvc.Application.Command.PackageCommand;
 using OrderSvc.Application.Command.ProductCommand;
+using OrderSvc.Application.Query.CompanyQuery;
 using OrderSvc.Application.Query.PackageMemberQuery;
 using OrderSvc.Controller;
 using System;
@@ -139,14 +143,63 @@ namespace BFF.Web.Controllers
         }
 
         [HttpPut("Member/Update")]
-        public async Task<ActionResult<int>> UpdateMember([FromBody] UpdateCustomerCommand rq)
+        public async Task<IActionResult> UpdateMember([FromBody] UpdateCustomerRequest rq)
         {
             try
             {
+                var rqCus = new UpdateCustomerCommand
+                {
+                    Id = rq.Id,
+                    CustomerName = rq.CustomerName,
+                    CompanyId = rq.CompanyId,
+                    Avatar = rq.Avatar,
+                    Position = rq.Position,
+                    Decripstion = rq.Decripstion,
+                    Bio = rq.Bio,
+                    coverImage = rq.coverImage,
+                    DOB = rq.DOB,
+                    memberShip = rq.memberShip,
+                    Email = rq.Email,
+                    PhoneNumber = rq.PhoneNumber,
+                    Role = rq.Role,
+
+                };
+                if (rq.CompanyName != null)
+                {
+                    var checkCusrq = new ViewDetailCustomerQuery { Id = rq.Id };
+                    var checkCUs = await _mediator.Send(checkCusrq);
+                    if (checkCUs.profileCustomer.CompanyId != null)
+                    {
+                        var UpCom = new UpdateCompanyCommand { Id = (Guid)checkCUs.profileCustomer.CompanyId, CompanyName = rq.CompanyName };
+                        var upc= await _mediator.Send(UpCom);
+                       rq.CompanyId=upc.Id;
+                        var up = new UpdateCustomerCommand { Id = rq.Id, CompanyId = rq.CompanyId };
+                        await _mediator.Send(up);
 
 
-                var res = await _mediator.Send(rq);
-                return Ok(res);
+                    }
+                    else
+                    {
+                      
+                        var newCom = new CreateCompanyCommand { CompanyName = rq.CompanyName };
+                        var newC = await  _mediator.Send(newCom);
+                        rq.CompanyId = newC.Id;
+                        var up = new UpdateCustomerCommand {Id=rq.Id,   CompanyId = rq.CompanyId };
+                        await _mediator.Send(up);
+                    }
+                   
+                }
+                
+                  
+                var resup = await _mediator.Send(rqCus);
+                   
+                var resultrq = new ViewDetailCustomerQuery
+                {
+                    Id = rq.Id,
+                };
+                
+                    return Ok(await _mediator.Send(resultrq));
+                
             }
             catch (Exception e)
             {
