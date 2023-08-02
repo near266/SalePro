@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace OrderSvc.Application.Command.OrderCommand
 {
-    public class AddAffiliateCommand :IRequest<Affiliates>
+    public class AddAffiliateCommand : IRequest<Affiliates>
     {
         [JsonIgnore]
         public Guid? Id { get; set; }
@@ -35,9 +35,9 @@ namespace OrderSvc.Application.Command.OrderCommand
         {
             var res = _mapper.Map<Affiliates>(rq);
             var check = await _repo.AddAffi(res);
-            if(check != 0)
+            if (check != 0)
             {
-               return res;
+                return res;
             }
             else
             {

@@ -106,7 +106,7 @@ namespace BFF.Web.Controllers
         {
             try
             {
-                var deletecatepro = new DeleteCateProCommand { Id =rq.Id};
+                var deletecatepro = new DeleteCateProCommand { Id = rq.Id };
                 var del = await _mediator.Send(deletecatepro);
 
                 var res = await _mediator.Send(rq);
@@ -148,7 +148,7 @@ namespace BFF.Web.Controllers
             }
         }
 
-        //  COMPANY
+          //COMPANY
         [HttpPost("Company/Create")]
         public async Task<IActionResult> CreatCompany([FromBody] CreateCompanyCommand rq)
         {
@@ -188,7 +188,7 @@ namespace BFF.Web.Controllers
                 return StatusCode(500, e.Message);
             }
         }
-        // Category
+       //  Category
         [HttpPost("Category/Create")]
         public async Task<IActionResult> CreatCategory([FromBody] CreateCategoryCommand rq)
         {
@@ -249,9 +249,9 @@ namespace BFF.Web.Controllers
             }
         }
 
-        /// <summary>
-        /// Tạo giao dịch
-        /// </summary>
+       // <summary>
+       // Tạo giao dịch
+       // </summary>
         [HttpPost("Order/Create")]
 
         public async Task<IActionResult> CreatOrder([FromBody] TransactionDto rq)
@@ -264,28 +264,28 @@ namespace BFF.Web.Controllers
                 // tao phien giao dich
                 var tran = new AddTransactionsCommand
                 {
-                    TransactionName= rq.TransactionName,
-                    TransactionType= rq.TransactionType,
-                    TransactionDate= rq.TransactionDate== null? DateTime.Now : rq.TransactionDate,
-                    PaymentMethod= rq.PaymentMethod,
-                    TotalAmount= rq.TotalAmount,
+                    TransactionName = rq.TransactionName,
+                    TransactionType = rq.TransactionType,
+                    TransactionDate = rq.TransactionDate == null ? DateTime.Now : rq.TransactionDate,
+                    PaymentMethod = rq.PaymentMethod,
+                    TotalAmount = rq.TotalAmount,
 
 
                 };
-              var tranres=  await _mediator.Send(tran);
-                // nhap affiiate
+                var tranres = await _mediator.Send(tran);
+               //  nhap affiiate
                 var aff = new AddAffiliateCommand
                 {
-                    BuyerId= rq.BuyerId,
-                    SalerId= rq.SalerId,
-                    ReferrerId  = rq.ReferrerId,
-                    ParticipantsId= rq.ParticipantsId,
+                    BuyerId = rq.BuyerId,
+                    SalerId = rq.SalerId,
+                    ReferrerId = rq.ReferrerId,
+                    ParticipantsId = rq.ParticipantsId,
                 };
 
-                
+
                 var affires = await _mediator.Send(aff);
 
-                // Order
+//                 Order
                 var order = new CreateOrderCommand
                 {
                     Id = rq.Id,
@@ -293,20 +293,24 @@ namespace BFF.Web.Controllers
                     SalePerson = rq.SalePerson,
                     TransactionId = tranres.TransactionId,
                     AffiliateId = affires.Id,
-                    VoucherId= rq.VoucherId,
-                    Status=1,
+                    VoucherId = rq.VoucherId,
+                    Status = 1,
                 };
-               var res = await _mediator.Send(order);
+                var res = await _mediator.Send(order);
 
                 // ProductaddOrder
-                foreach(var p in rq.ProductId)
+                foreach (var p in rq.Products)
                 {
 
-                var pr = new UpdateProductCommand { 
-                 Id = p,
-                 OrderId=rq.Id,
-                };
-                var prores = await _mediator.Send(pr);
+                    var pr = new CreateOrderItemC
+                    {
+                      Id=Guid.NewGuid(),
+                      OrderId=rq.Id,
+                      ProductId=p.ProductId,
+                      Quantity=p.quantity,
+
+                    };
+                    var prores = await _mediator.Send(pr);
                 }
 
                 var view = new ViewDetailOrderQuery
@@ -373,35 +377,35 @@ namespace BFF.Web.Controllers
 
                 return StatusCode(500, e.Message);
             }
-        }
+    }
 
-        [HttpPost("Order/UpdateStatus")]
+    [HttpPost("Order/UpdateStatus")]
 
-        public async Task<IActionResult> UpdateStatusOrder([FromBody] UpdateStatusRq rq)
+    public async Task<IActionResult> UpdateStatusOrder([FromBody] UpdateStatusRq rq)
+    {
+        _logger.LogInformation($"REST request Create Category : {JsonConvert.SerializeObject(rq)}");
+
+        try
         {
-            _logger.LogInformation($"REST request Create Category : {JsonConvert.SerializeObject(rq)}");
-
-            try
+            var result = 0;
+            foreach (var i in rq.Id)
             {
-                var result = 0;
-                foreach(var i in rq.Id)
+                var up = new UpdateStatusOrderCommand
                 {
-                    var up = new UpdateStatusOrderCommand
-                    {
-                        Id = i,
-                        Status=rq.Status,
-                    };
-                   var res= await _mediator.Send(up);
-                    result++;
-                }
-                return Ok(result);
+                    Id = i,
+                    Status = rq.Status,
+                };
+                var res = await _mediator.Send(up);
+                result++;
             }
-            catch (Exception e)
-            {
-                _logger.LogError($"REST request to Create Category fail: {e.Message}");
+            return Ok(result);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError($"REST request to Create Category fail: {e.Message}");
 
-                return StatusCode(500, e.Message);
-            }
+            return StatusCode(500, e.Message);
         }
     }
+}
 }

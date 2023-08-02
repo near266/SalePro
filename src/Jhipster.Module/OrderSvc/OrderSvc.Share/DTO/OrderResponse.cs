@@ -51,8 +51,7 @@ namespace OrderSvc.Share.DTO
     }
     public class ProductDTOs
     {
-        public int? quantity { get;set; }
-        public IEnumerable<product> products { get; set; }
+        public IEnumerable<product>? products { get; set; }
 
 
     }
@@ -65,6 +64,7 @@ namespace OrderSvc.Share.DTO
         public double? price { get; set; }
       public Guid? CateId { get;set; }   
       public string? CateName { get; set; } 
+     public int? Quantity { get; set; }
       
     }
     public class Payment

@@ -13,7 +13,7 @@ namespace OrderSvc.Domain.Entities
         public string CustomerName { get; set; }
         public string Username { get; set; }
         public DateTime? DOB { get; set; }
-        [JsonIgnore]
+
         public Guid? CompanyId { get; set; }
         public string? Position { get; set; }
         public string? Decripstion { get; set; }

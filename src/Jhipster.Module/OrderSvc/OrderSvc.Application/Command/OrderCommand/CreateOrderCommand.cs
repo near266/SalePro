@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace OrderSvc.Application.Command.OrderCommand
 {
-    public class CreateOrderCommand :IRequest<Order>
+    public class CreateOrderCommand : IRequest<Order>
     {
         [JsonIgnore]
         public Guid Id { get; set; }
@@ -38,9 +38,9 @@ namespace OrderSvc.Application.Command.OrderCommand
 
         public async Task<Order> Handle(CreateOrderCommand rq, CancellationToken cancellationToken)
         {
-            var order= _mapper.Map<Order>(rq);
-            var res =await _repo.AddOrder(order);
-            if(res !=0)
+            var order = _mapper.Map<Order>(rq);
+            var res = await _repo.AddOrder(order);
+            if (res != 0)
             {
                 return order;
             }

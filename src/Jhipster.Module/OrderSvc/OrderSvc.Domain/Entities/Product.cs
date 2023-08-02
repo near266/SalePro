@@ -11,7 +11,7 @@ namespace OrderSvc.Domain.Entities
     {
         public Guid? CompanyId { get; set; }
         public Company? Company { get; set; }
-        public string ProductName { get; set; }
+        public string? ProductName { get; set; }
         public double? Price { get; set; }
         public double? PriceNum { get; set; }
 
@@ -21,7 +21,6 @@ namespace OrderSvc.Domain.Entities
         public List<string>? Image {  get; set; }
         public string? Decripstion { get; set; }
         public virtual CategoryProduct? CategoryProduct { get; set; }
-        public Guid? OrderId { get; set; }
-        public virtual Order? Order { get; set; }
+     
     }
 }

@@ -16,7 +16,7 @@ namespace OrderSvc.Application.Query.OrderQuery
     {
         public string? name { get; set; }
         public int? status { get; set; }
-        public int page { get;set; }
+        public int page { get; set; }
         public int pageSize { get; set; }
     }
     public class SearchOrGetAllQueryHandler : IRequestHandler<SearchOrGetAllQuery, PagedList<SearchOrder>>
@@ -30,8 +30,8 @@ namespace OrderSvc.Application.Query.OrderQuery
         }
 
         public async Task<PagedList<SearchOrder>> Handle(SearchOrGetAllQuery rq, CancellationToken cancellationToken)
-        {        
-            return await _repo.SearchOrder(rq.name,rq.status,rq.page,rq.pageSize);
+        {
+            return await _repo.SearchOrder(rq.name, rq.status, rq.page, rq.pageSize);
         }
     }
 }

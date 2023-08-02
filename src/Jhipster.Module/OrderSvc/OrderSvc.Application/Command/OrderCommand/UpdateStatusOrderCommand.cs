@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OrderSvc.Application.Command.OrderCommand
 {
-    public class UpdateStatusOrderCommand :IRequest<int>
+    public class UpdateStatusOrderCommand : IRequest<int>
     {
         public Guid Id { get; set; }
         public Guid? SalePerson { get; set; }
@@ -33,11 +33,11 @@ namespace OrderSvc.Application.Command.OrderCommand
         public async Task<int> Handle(UpdateStatusOrderCommand rq, CancellationToken cancellationToken)
         {
             var order = _mapper.Map<Order>(rq);
-            var res = await _repo.UpdateOrder(order,cancellationToken);
-           
-                return res;
-            
-           
+            var res = await _repo.UpdateOrder(order, cancellationToken);
+
+            return res;
+
+
         }
     }
 }

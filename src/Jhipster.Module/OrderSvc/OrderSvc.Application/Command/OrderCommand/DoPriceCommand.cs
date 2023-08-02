@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace OrderSvc.Application.Command.OrderCommand
 {
-    public class DoPriceCommand :IRequest<PriceDto>
+    public class DoPriceCommand : IRequest<PriceDto>
     {
         public List<Guid>? ProductId { get; set; }
         public Guid? VoucherId { get; set; }
@@ -31,6 +31,6 @@ public class DoPriceCommandHandler : IRequestHandler<DoPriceCommand, PriceDto>
 
     public async Task<PriceDto> Handle(DoPriceCommand rq, CancellationToken cancellationToken)
     {
-      return await _repo.Price(rq.ProductId, rq.VoucherId);
+        return await _repo.Price(rq.ProductId, rq.VoucherId);
     }
 }

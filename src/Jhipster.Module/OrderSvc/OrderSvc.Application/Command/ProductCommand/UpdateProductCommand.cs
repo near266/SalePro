@@ -19,7 +19,7 @@ namespace OrderSvc.Application.Command.ProductCommand
         public Guid? Id { get; set; }
         public Guid? OrderId { get; set; }  
        
-        public string ProductName { get; set; }
+        public string? ProductName { get; set; }
         public double? Price { get; set; }
         public double? PriceNum { get; set; }
 

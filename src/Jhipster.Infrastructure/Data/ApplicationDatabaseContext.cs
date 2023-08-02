@@ -35,6 +35,8 @@ namespace Jhipster.Infrastructure.Data
         public DbSet<Category> categories { get; set; }
         public DbSet<Product> products { get; set; }
         public DbSet<Order> orders { get; set; }
+        public DbSet<OrderItem> orderItems { get; set; }
+
         public DbSet<CategoryProduct> categoriesProduct { get; set; }
         public DbSet<Company> companies { get; set; }
         public DbSet<PackageMember> packageMembers { get; set; }

@@ -2,6 +2,7 @@
 using Google.Apis.Upload;
 using InteractiveSvc.Infrastructure.Persistences;
 using Jhipster.Service.Utilities;
+using MailKit.Net.Imap;
 using Microsoft.EntityFrameworkCore;
 using OrderSvc.Application.Persistences;
 using OrderSvc.Domain.Abstractions;
@@ -106,14 +107,24 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
 
         }
 
-        public async Task<int> Update(Product? product)
+        public async Task<int> Update(Product product)
         {
-            var check = await _Db.products.FirstOrDefaultAsync(i=>i.Id.Equals(product.Id)); 
+            var check = await _Db.products.FirstOrDefaultAsync(i=>i.Id.Equals(product.Id));
+            List<string>? temp = new List<string>();
+            temp.AddRange( check.Image);
 
             if (check == null) { throw new ArgumentException("not found"); }
             else
             {
+             
                 _mapper.Map(product, check);
+                if (product.Image.Count == 0 || product.Image == null)
+                {
+
+                    check.Image.Clear();
+                    check.Image.AddRange(temp);
+                }
+
                 return await _Db.SaveChangesAsync();
             }
         }

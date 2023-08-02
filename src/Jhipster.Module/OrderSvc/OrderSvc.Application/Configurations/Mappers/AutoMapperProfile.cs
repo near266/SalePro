@@ -3,6 +3,7 @@ using Jhipster.Service.Utilities;
 using OrderSvc.Application.Command.CategoryCommand;
 using OrderSvc.Application.Command.CompanyCommand;
 using OrderSvc.Application.Command.OrderCommand;
+//using OrderSvc.Application.Command.OrderCommand;
 using OrderSvc.Application.Command.PackageCommand;
 using OrderSvc.Application.Command.ProductCommand;
 using OrderSvc.Application.Command.TransactionsCommand;
@@ -20,7 +21,11 @@ namespace OrderSvc.Application.Configurations.Mappers
             //Product
             CreateMap<Product, Product>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
             CreateMap<AddProductCommand, Product>();
-            CreateMap<UpdateProductCommand, Product>();
+            CreateMap<Product, UpdateProductCommand>()
+                .ReverseMap()
+                .ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null)); ;
+            CreateMap<Product, UpdateProductCommand>()
+           .ForMember(dest => dest.Image, opt => opt.MapFrom((src, dest) => src.Image ?? dest.Image));
             CreateMap(typeof(PagedList<Product>), typeof(PagedList<ProductDTO>));
             CreateMap<Product, ProductDTO>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null)); 
            
@@ -56,12 +61,16 @@ namespace OrderSvc.Application.Configurations.Mappers
             //Order
 
             CreateMap<Order, Order>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
-            CreateMap<Order, UpdateStatusOrderCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+           CreateMap<Order, UpdateStatusOrderCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
 
-            CreateMap<Order, CreateOrderCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+          CreateMap<Order, CreateOrderCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
             //Affiliate
             CreateMap<Affiliates, Affiliates>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
-            CreateMap<Affiliates, AddAffiliateCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+              CreateMap<Affiliates, AddAffiliateCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+
+            // OrderItems
+            CreateMap<OrderItem, OrderItem>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+            CreateMap<OrderItem, CreateOrderItemC>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
 
 
         }

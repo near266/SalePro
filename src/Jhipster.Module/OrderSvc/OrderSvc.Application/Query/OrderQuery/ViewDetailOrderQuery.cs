@@ -14,7 +14,7 @@ namespace OrderSvc.Application.Query.OrderQuery
 {
     public class ViewDetailOrderQuery : IRequest<OrderResponse>
     {
-        public Guid Id { get; set; }   
+        public Guid Id { get; set; }
     }
     public class ViewDetailOrderQueryHandler : IRequestHandler<ViewDetailOrderQuery, OrderResponse>
     {

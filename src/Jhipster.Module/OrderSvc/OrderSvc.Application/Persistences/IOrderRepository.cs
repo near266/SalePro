@@ -23,5 +23,11 @@ namespace OrderSvc.Application.Persistences
        Task<int> AddAffi(Affiliates affiliates);
 
         Task<PriceDto> Price(List<Guid>? ProductId, Guid? VoucherId);
+
+        // OrderItem
+        Task<OrderItem> CreateOrderItem(OrderItem item);
+        Task<OrderItem> UpdateOrderItem(OrderItem item);
+        Task<int> DeleteOrderItem(Guid Id);
+
     }
 }

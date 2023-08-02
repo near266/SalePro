@@ -13,7 +13,7 @@ namespace BFF.Web.DTOs
 
         [JsonIgnore]
         public Guid Id { get; set; }
-        public List<Guid>? ProductId { get; set; }
+        public List<ProductRq>? Products { get; set; }
         public Guid? SalePerson { get; set; }
         public Guid? BoughtPerson { get; set; }
         public Guid? VoucherId { get; set; }
@@ -39,4 +39,9 @@ namespace BFF.Web.DTOs
         public Guid? SalerId { get; set; }
         public Guid? ParticipantsId { get; set; }
     }
+    public class ProductRq { 
+     public int quantity { get; set; }
+     public Guid? ProductId { get; set; }
+    }
+
 }

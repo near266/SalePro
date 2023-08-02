@@ -83,30 +83,30 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             return obj;
         }
 
-        public  async Task<PagedList<PackageMember>> SearchOrDetail(Guid? Id, string name, int page, int pageSize)
-        {
-            var query = _Db.packageMembers.AsQueryable();
-            if (Id != null)
-            {
-                query = query.Where(i => i.Id.Equals(Id));
-            }
-            if (name != null)
-            {
-                query = query.Where(i => !string.IsNullOrEmpty(i.PackageName) && i.PackageName.ToLower().Contains(name.ToLower().Trim()));
+        //public  async Task<PagedList<PackageMember>> SearchOrDetail(Guid? Id, string name, int page, int pageSize)
+        //{
+        //    var query = _Db.packageMembers.AsQueryable();
+        //    if (Id != null)
+        //    {
+        //        query = query.Where(i => i.Id.Equals(Id));
+        //    }
+        //    if (name != null)
+        //    {
+        //        query = query.Where(i => !string.IsNullOrEmpty(i.PackageName) && i.PackageName.ToLower().Contains(name.ToLower().Trim()));
 
-            }
+        //    }
            
-            var sQuery = query;
-            var sQuery1 = await sQuery.Skip(pageSize * (page - 1))
-                                .Take(pageSize)
-                                .ToListAsync();
-            var reslist = await sQuery.ToListAsync();
-            return new PagedList<PackageMember>
-            {
-                Data = sQuery1,
-                TotalCount = reslist.Count,
-            };
-        }
+        //    var sQuery = query;
+        //    var sQuery1 = await sQuery.Skip(pageSize * (page - 1))
+        //                        .Take(pageSize)
+        //                        .ToListAsync();
+        //    var reslist = await sQuery.ToListAsync();
+        //    return new PagedList<PackageMember>
+        //    {
+        //        Data = sQuery1,
+        //        TotalCount = reslist.Count,
+        //    };
+        //}
 
         public async Task<PagedList<userResponse>> SearchOrDetail(string? name, int page, int pageSize)
         {
@@ -119,17 +119,17 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             }
 
             var sQuery = query;
-            var sQuery1 = await sQuery
+            var sQuery1 =  sQuery
                 .Select( i=>new userResponse()
                 {
-                    profileCustomer= sQuery.SingleOrDefault(),
+                    profileCustomer= _Db.profileCustomer.Where(a=>a.Id.Equals(i.Id)).FirstOrDefault(),
                     products=_Db.products.Where(a=>a.CompanyId.Equals(i.CompanyId)).Select(a=>a.ProductName).ToList(),
                     CompanyName= _Db.companies.Where(a=>a.Id.Equals(i.CompanyId)).Select(a=>a.CompanyName).FirstOrDefault(),
                 })
                 .Skip(pageSize * (page - 1))
 
                                 .Take(pageSize)
-                                .ToListAsync();
+                                .ToList();
             var reslist = await sQuery.ToListAsync();
             return new PagedList<userResponse>
             {
