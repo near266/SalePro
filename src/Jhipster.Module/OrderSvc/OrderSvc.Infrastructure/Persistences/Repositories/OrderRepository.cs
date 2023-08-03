@@ -72,6 +72,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             {
                 Id = i.ProductId,
                 ProductName = i.Product.ProductName,
+                
                 Image = i.Product.Image,
                 price = i.Product.Price,
                 CateId = i.Product.CategoryProduct.CategoryId,
@@ -126,6 +127,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                    TransactionDate = trsQr.Where(a => a.TransactionId.Equals(i.TransactionId)).Select(a => a.TransactionDate).FirstOrDefault(),
                    TransactionName = trsQr.Where(a => a.TransactionId.Equals(i.TransactionId)).Select(a => a.TransactionName).FirstOrDefault(),
                    SalePerson = i.SalePerson,
+                   Status=i.Status,
                    SalerName = User.Where(a => a.Id.Equals(i.SalePerson)).Select(a => a.CustomerName).FirstOrDefault(),
                    BoughtPerson = i.BoughtPerson,
                    BoughtPersonName = User.Where(a => a.Id.Equals(i.BoughtPerson)).Select(a => a.CustomerName).FirstOrDefault(),
@@ -218,6 +220,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             var result = await query.Select(i => new SearchOrder
             {
                 Id = i.Id,
+                Status=i.Status,
                 TransactionId = i.TransactionId,
                 ProductDTOs = new ProductDTOs
                 {

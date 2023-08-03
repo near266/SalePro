@@ -12,6 +12,7 @@ namespace OrderSvc.Share.DTO
         public Guid? SalePerson { get; set; }
         public string? SalerName { get; set; }
         public Guid? BoughtPerson { get; set; }
+        public int?  Status { get; set; }
         public string? BoughtPersonName { get; set; }
         public string? TransactionId { get;set; }
         public string? TransactionName { get;set; }
