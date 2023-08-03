@@ -142,18 +142,17 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             return obj.SingleOrDefault();
         }
 
-        public async Task<PriceDto> Price(List<Guid>? ProductId, Guid? VoucherId )
+        public async Task<PriceDto> Price(List<piricerq> Product, Guid? VoucherId )
         {
             var res = new PriceDto();
             double? total = 0;
             double? voucher = 0;
             double? price = 0;
-            var pro = await _Db.orderItems.Where(i => ProductId.Contains(i.ProductId)).ToListAsync();
             var v = await _Db.vouchers.Where(i => i.Id == VoucherId).FirstOrDefaultAsync();
-            foreach (var item in pro)
+            foreach (var item in Product)
             {
               
-                    total += _Db.products.Where(i=>i.Id.Equals(item.ProductId)).Select(i=>i.Price).FirstOrDefault()*item.Quantity;
+                    total += _Db.products.Where(i=>i.Id.Equals(item.ProductId)).Select(i=>i.Price).FirstOrDefault()*item.quantity ;
                 
             }
 
