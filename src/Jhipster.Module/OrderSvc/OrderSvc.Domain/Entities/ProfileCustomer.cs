@@ -15,6 +15,7 @@ namespace OrderSvc.Domain.Entities
         public DateTime? DOB { get; set; }
 
         public Guid? CompanyId { get; set; }
+
         public string? Position { get; set; }
         public string? Decripstion { get; set; }
         public string? ProductName { get; set; }    

@@ -169,9 +169,9 @@ namespace BFF.Web.Controllers
                 {
                     var checkCusrq = new ViewDetailCustomerQuery { Id = rq.Id };
                     var checkCUs = await _mediator.Send(checkCusrq);
-                    if (checkCUs.profileCustomer.CompanyId != null)
+                    if (checkCUs.CompanyId != null)
                     {
-                        var UpCom = new UpdateCompanyCommand { Id = (Guid)checkCUs.profileCustomer.CompanyId, CompanyName = rq.CompanyName };
+                        var UpCom = new UpdateCompanyCommand { Id = (Guid)checkCUs.CompanyId, CompanyName = rq.CompanyName };
                         var upc= await _mediator.Send(UpCom);
                        rq.CompanyId=upc.Id;
                         var up = new UpdateCustomerCommand { Id = rq.Id, CompanyId = rq.CompanyId };

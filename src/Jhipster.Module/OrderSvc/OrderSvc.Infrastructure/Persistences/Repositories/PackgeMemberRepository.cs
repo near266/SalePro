@@ -76,7 +76,6 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             var obj = await _Db.profileCustomer.Where(i=>i.Id.Equals(Id)).Select(i=> new userResponse()
             {
                 profileCustomer = _Db.profileCustomer.Where(i => i.Id.Equals(Id)).SingleOrDefault(),
-                products = _Db.products.Where(a => a.CompanyId.Equals(i.CompanyId)).Select(a => a.ProductName).ToList(),
                 CompanyName = _Db.companies.Where(a => a.Id.Equals(i.CompanyId)).Select(a => a.CompanyName).FirstOrDefault(),
             }).FirstOrDefaultAsync();
             if (obj == null) { throw new ArgumentNullException("not found"); }
@@ -123,7 +122,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                 .Select( i=>new userResponse()
                 {
                     profileCustomer= _Db.profileCustomer.Where(a=>a.Id.Equals(i.Id)).FirstOrDefault(),
-                    products=_Db.products.Where(a=>a.CompanyId.Equals(i.CompanyId)).Select(a=>a.ProductName).ToList(),
+                   
                     CompanyName= _Db.companies.Where(a=>a.Id.Equals(i.CompanyId)).Select(a=>a.CompanyName).FirstOrDefault(),
                 })
                 .Skip(pageSize * (page - 1))
