@@ -84,7 +84,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
              PriceNum = i.PriceNum,
              warranty=i.warranty,
               ProviderId = i.ProviderId,
-              Provider = _Db.profileCustomer.Where(a => a.Id.Equals(Guid.Parse(i.ProviderId))).Select(a => a.CustomerName).FirstOrDefault(),
+              Provider = _Db.profileCustomer.Where(a => a.Id.ToString().Equals(i.ProviderId)).Select(a => a.CustomerName).FirstOrDefault(),
                 CompanyId =i.CompanyId,
              CompanyName=i.Company.CompanyName,
              Image=i.Image,
