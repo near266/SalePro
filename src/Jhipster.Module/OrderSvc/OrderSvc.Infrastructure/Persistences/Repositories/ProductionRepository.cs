@@ -52,7 +52,8 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                 Price = i.Price,
                 PriceNum = i.PriceNum,
                 warranty = i.warranty,
-                Provider = i.Provider,
+                ProviderId = i.ProviderId,
+                Provider= _Db.profileCustomer.Where(a=>a.Id.ToString().Equals(i.ProviderId)).Select(a=>a.CustomerName).FirstOrDefault(),
                 CompanyId = i.CompanyId,
                 CompanyName = i.Company.CompanyName,
                 Image = i.Image,
@@ -82,8 +83,9 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
              Price = i.Price,
              PriceNum = i.PriceNum,
              warranty=i.warranty,
-             Provider= i.Provider,
-             CompanyId=i.CompanyId,
+              ProviderId = i.ProviderId,
+              Provider = _Db.profileCustomer.Where(a => a.Id.Equals(Guid.Parse(i.ProviderId))).Select(a => a.CustomerName).FirstOrDefault(),
+                CompanyId =i.CompanyId,
              CompanyName=i.Company.CompanyName,
              Image=i.Image,
              Decripstion=i.Decripstion,
@@ -118,7 +120,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             {
              
                 _mapper.Map(product, check);
-                if (product.Image.Count == 0 || product.Image == null)
+                if (product.Image.FirstOrDefault()== null)
                 {
 
                     check.Image.Clear();

@@ -17,7 +17,7 @@ namespace OrderSvc.Domain.Entities
         public Guid? CompanyId { get; set; }
         public string? Position { get; set; }
         public string? Decripstion { get; set; }
-
+        public string? ProductName { get; set; }    
         public string? Avatar {get; set; }
         public string? coverImage { get; set; }
         public string? Email { get; set; }

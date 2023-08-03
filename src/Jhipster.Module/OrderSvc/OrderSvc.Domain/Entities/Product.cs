@@ -15,12 +15,13 @@ namespace OrderSvc.Domain.Entities
         public double? Price { get; set; }
         public double? PriceNum { get; set; }
 
-        public string? Provider { get;set; }
+        public string? ProviderId { get;set; }
         public string? warranty { get; set; }
       
         public List<string>? Image {  get; set; }
         public string? Decripstion { get; set; }
         public virtual CategoryProduct? CategoryProduct { get; set; }
+        
      
     }
 }

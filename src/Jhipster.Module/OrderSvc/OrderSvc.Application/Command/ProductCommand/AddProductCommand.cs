@@ -18,12 +18,16 @@ namespace OrderSvc.Application.Command.ProductCommand
     {
         [JsonIgnore]
         public Guid? Id { get; set; }
+        [JsonIgnore]
+
         public Guid? CompanyId { get; set; }
         public string ProductName { get; set; }
         public double? Price { get; set; }
         public double? PriceNum { get; set; }
 
-        public string? Provider { get; set; }
+        public string? ProviderId { get; set; }
+
+
         public List<string>? Image { get; set; }
         public string? Decripstion { get; set; }
         [JsonIgnore]

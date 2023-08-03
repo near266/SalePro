@@ -5,6 +5,7 @@ using OrderSvc.Application.Persistences;
 using OrderSvc.Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
@@ -22,6 +23,19 @@ namespace OrderSvc.Application.Command.OrderCommand
         public Guid? AffiliateId { get; set; }
         public Guid? VoucherId { get; set; }
         public int? Status { get; set; }
+        [JsonIgnore]
+
+        public string? CreatedBy { get; set; }
+        [JsonIgnore]
+
+        public DateTime CreatedDate { get; set; }
+        [JsonIgnore]
+
+        [MaxLength(100)]
+        public string? LastModifiedBy { get; set; }
+        [JsonIgnore]
+
+        public DateTime? LastModifiedDate { get; set; }
 
 
 

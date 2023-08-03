@@ -12,4 +12,9 @@ namespace OrderSvc.Share.DTO
      public double? PriceVoucher { get; set; }
      public  double? RealPice { get; set; }
     }
+    public class piricerq { 
+    public Guid? ProductId { get; set; }
+    public int? quantity { get; set; }
+    }
+
 }

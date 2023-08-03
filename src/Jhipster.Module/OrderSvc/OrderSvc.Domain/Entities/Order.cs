@@ -21,6 +21,11 @@ namespace OrderSvc.Domain.Entities
         public Guid? AffiliateId {  get; set; }
         public Affiliates? Affiliates { get; set;}
         public int? Status { get; set; }
+        public string? CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        [MaxLength(100)]
+        public string? LastModifiedBy { get; set; }
+        public DateTime? LastModifiedDate { get; set; }
         public IEnumerable<OrderItem> OrderItem{ get; set; }
 
     }

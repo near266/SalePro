@@ -142,7 +142,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             return obj.SingleOrDefault();
         }
 
-        public async Task<PriceDto> Price(List<Guid>? ProductId, Guid? VoucherId)
+        public async Task<PriceDto> Price(List<Guid>? ProductId, Guid? VoucherId )
         {
             var res = new PriceDto();
             double? total = 0;
@@ -201,7 +201,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
 
         public async Task<PagedList<SearchOrder>> SearchOrder(string? name, int? status, int page, int pageSize)
         {
-            var query = _Db.orders.Include(i => i.OrderItem).ThenInclude(i=>i.Product).AsQueryable();
+            var query = _Db.orders.Include(i => i.OrderItem).ThenInclude(i=>i.Product).OrderByDescending(i=>i.CreatedDate).AsQueryable();
             if (name != null)
             {
                 var queryPro = _Db.products
@@ -230,6 +230,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                         price = a.Product.Price,
                         CateId = a.Product.CategoryProduct.CategoryId,
                         CateName = a.Product.CategoryProduct.Category.CategoryName,
+                        Quantity=a.Quantity
                     }).ToList(),
 
                 },

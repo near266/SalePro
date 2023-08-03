@@ -13,6 +13,7 @@ namespace OrderSvc.Share.DTO
         public double? Price { get; set; }
         public double? PriceNum { get; set; }
         public string? Provider { get; set; }
+        public string? ProviderId { get; set; }
         public string? warranty { get; set; }
         public Guid? CompanyId { get; set; }
         public string? CompanyName { get; set; }

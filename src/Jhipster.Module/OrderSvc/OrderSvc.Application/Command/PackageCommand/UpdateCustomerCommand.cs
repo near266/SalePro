@@ -29,6 +29,8 @@ namespace OrderSvc.Application.Command.PackageCommand
 
         [MaxLength(int.MaxValue)]
         public string? Avatar { get; set; }
+        public string? ProductName { get; set; }
+
         public string? coverImage { get; set; }
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }

@@ -23,7 +23,8 @@ namespace OrderSvc.Application.Command.ProductCommand
         public double? PriceNum { get; set; }
 
         public string? Provider { get; set; }
-      
+        public string? ProviderId { get; set; }
+
 
         public List<string>? Image { get; set; }
         public string? Decripstion { get; set; }

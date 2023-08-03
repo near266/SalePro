@@ -60,7 +60,7 @@ namespace BFF.Web.Controllers
                     Image = rq.Image,
                     PriceNum = rq.PriceNum,
 
-                    Provider = rq.Provider,
+                    ProviderId = rq.ProviderId,
                     Decripstion = rq.Decripstion,
                     CreatedBy = GetUsernameFromContext(),
                     CreatedDate = DateTime.Now,
@@ -294,7 +294,8 @@ namespace BFF.Web.Controllers
                     TransactionId = tranres.TransactionId,
                     AffiliateId = affires.Id,
                     VoucherId = rq.VoucherId,
-                    Status = 1,
+                    Status = 0,
+                    CreatedDate=DateTime.Now,
                 };
                 var res = await _mediator.Send(order);
 

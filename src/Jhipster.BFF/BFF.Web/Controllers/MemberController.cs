@@ -162,6 +162,7 @@ namespace BFF.Web.Controllers
                     Email = rq.Email,
                     PhoneNumber = rq.PhoneNumber,
                     Role = rq.Role,
+                    ProductName=rq.ProductName
 
                 };
                 if (rq.CompanyName != null)

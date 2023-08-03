@@ -13,12 +13,14 @@ namespace BFF.Web.DTOs
         [JsonIgnore]
         public Guid Id { get; set; }
         public Guid? CateId {  get; set; }
+        [JsonIgnore]
+
         public Guid? CompanyId { get; set; }
         public string ProductName { get; set; }
         public double? Price { get; set; }
         public double? PriceNum { get; set; }
 
-        public string? Provider { get; set; }
+        public string? ProviderId { get; set; }
         public string? warranty { get; set; }
         public List<string>? Image { get; set; }
         public string? Decripstion { get; set; }
