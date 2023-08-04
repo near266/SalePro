@@ -120,12 +120,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             {
              
                 _mapper.Map(product, check);
-                if (product.Image.FirstOrDefault()== null)
-                {
 
-                    check.Image.Clear();
-                    check.Image.AddRange(temp);
-                }
 
                 return await _Db.SaveChangesAsync();
             }

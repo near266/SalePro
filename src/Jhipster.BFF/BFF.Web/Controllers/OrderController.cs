@@ -77,8 +77,9 @@ namespace BFF.Web.Controllers
                     };
                     await _mediator.Send(catepro);
                 }
-
-                return Ok(res);
+                var view = new GetProductDetailQuery { Id = rq.Id };
+                var result = await _mediator.Send(view);
+                return Ok(result);
             }
             catch (Exception e)
             {
@@ -94,7 +95,9 @@ namespace BFF.Web.Controllers
                 rq.LastModifiedDate = DateTime.Now;
                 rq.LastModifiedBy = GetUsernameFromContext();
                 var res = await _mediator.Send(rq);
-                return Ok(res);
+                var view = new GetProductDetailQuery { Id = (Guid) rq.Id };
+                var result = await _mediator.Send(view);
+                return Ok(result);
             }
             catch (Exception e)
             {
