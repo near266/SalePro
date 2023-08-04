@@ -13,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace OrderSvc.Application.Query.PackageMemberQuery
 {
-    public class GetAllOrSearchQuery : IRequest<PagedList<userResponse>>
+    public class GetAllOrSearchQuery : IRequest<PagedList<ProfileRes>>
     {
         public string? name { get; set; }
         public int page {  get; set; }
         public int  pageSize { get; set; }
     }
-    public class GetAllOrSearchQueryHandler : IRequestHandler<GetAllOrSearchQuery, PagedList<userResponse>>
+    public class GetAllOrSearchQueryHandler : IRequestHandler<GetAllOrSearchQuery, PagedList<ProfileRes>>
     {
         private readonly IMapper _mapper;
         private readonly IPackageMember _repo;
@@ -29,9 +29,13 @@ namespace OrderSvc.Application.Query.PackageMemberQuery
             _repo = repo;
         }
 
-        public async Task<PagedList<userResponse>> Handle(GetAllOrSearchQuery rq, CancellationToken cancellationToken)
+        public async Task<PagedList<ProfileRes>> Handle(GetAllOrSearchQuery rq, CancellationToken cancellationToken)
         {
-            return await _repo.SearchOrDetail(rq.name, rq.page, rq.pageSize);
+             var reslut =await _repo.SearchOrDetail(rq.name, rq.page, rq.pageSize);
+           
+        
+            
+            return reslut;
         }
     }
 }

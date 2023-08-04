@@ -107,7 +107,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
         //    };
         //}
 
-        public async Task<PagedList<userResponse>> SearchOrDetail(string? name, int page, int pageSize)
+        public async Task<PagedList<ProfileRes>> SearchOrDetail(string? name, int page, int pageSize)
         {
             var query = _Db.profileCustomer.AsQueryable();
 
@@ -119,9 +119,23 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
 
             var sQuery = query;
             var sQuery1 =  sQuery
-                .Select( i=>new userResponse()
+                .Select( i=>new ProfileRes()
                 {
-                    profileCustomer= _Db.profileCustomer.Where(a=>a.Id.Equals(i.Id)).FirstOrDefault(),
+                    Id = i.Id,
+                   CustomerName= i.CustomerName,
+                   Username= i.Username,
+                   CompanyId= i.CompanyId,
+                   DOB= i.DOB,
+                   Position= i.Position,
+                   Decripstion= i.Decripstion,
+                   Avatar= i.Avatar,
+                   coverImage=i.coverImage,
+                   Email=i.Email,
+                   PhoneNumber=i.PhoneNumber,
+                   Bio=i.Bio,
+                   Role=i.Role,
+                   memberShip=i.memberShip,
+                  
                    
                     CompanyName= _Db.companies.Where(a=>a.Id.Equals(i.CompanyId)).Select(a=>a.CompanyName).FirstOrDefault(),
                 })
@@ -130,7 +144,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                                 .Take(pageSize)
                                 .ToList();
             var reslist = await sQuery.ToListAsync();
-            return new PagedList<userResponse>
+            return new PagedList<ProfileRes>
             {
                 Data = sQuery1,
                 TotalCount = reslist.Count,

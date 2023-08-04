@@ -50,7 +50,8 @@ namespace OrderSvc.Application.Configurations.Mappers
 			CreateMap<ProfileCustomer, AddProfileCustomerCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
             CreateMap<ProfileCustomer, UpdateCustomerCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
             CreateMap<ProfileRes, ProfileCustomer>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
-
+            CreateMap(typeof(PagedList<ProfileRes>), typeof(PagedList<ProfileCustomer>));
+            CreateMap<PagedList<ProfileRes>, PagedList<ProfileCustomer>>().ReverseMap();
             //Package
             CreateMap<PackageMember, PackageMember>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
             CreateMap<CreatePackageCommand, PackageMember>();

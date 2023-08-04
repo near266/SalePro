@@ -21,7 +21,7 @@ namespace OrderSvc.Application.Command.ProductCommand
         public string? ProductName { get; set; }
         public double? Price { get; set; }
         public double? PriceNum { get; set; }
-
+        [JsonIgnore]
         public string? Provider { get; set; }
         public string? ProviderId { get; set; }
 

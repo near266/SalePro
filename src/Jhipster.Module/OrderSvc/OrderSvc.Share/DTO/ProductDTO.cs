@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OrderSvc.Share.DTO
@@ -14,6 +15,7 @@ namespace OrderSvc.Share.DTO
         public double? PriceNum { get; set; }
         public string? Provider { get; set; }
         public string? ProviderId { get; set; }
+        [JsonIgnore]
         public string? warranty { get; set; }
         public Guid? CompanyId { get; set; }
         public string? CompanyName { get; set; }

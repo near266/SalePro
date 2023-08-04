@@ -13,6 +13,7 @@ namespace OrderSvc.Share.DTO
     }
     public class ProfileRes
     {
+        public Guid Id { get; set; }
         public string CustomerName { get; set; }
         public string Username { get; set; }
         public DateTime? DOB { get; set; }

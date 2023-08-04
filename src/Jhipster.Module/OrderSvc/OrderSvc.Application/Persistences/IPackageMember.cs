@@ -19,7 +19,7 @@ namespace OrderSvc.Application.Persistences
         Task<ProfileCustomer> AddCus(ProfileCustomer customer);
         Task<int> UpdateCus(ProfileCustomer customer);
         Task<int> DeleteCus(Guid? Id);
-        Task<PagedList<userResponse>> SearchOrDetail(string? name , int page , int pageSize);
+        Task<PagedList<ProfileRes>> SearchOrDetail(string? name , int page , int pageSize);
         Task<userResponse> GetDetailCus(Guid? Id);   
 
     }

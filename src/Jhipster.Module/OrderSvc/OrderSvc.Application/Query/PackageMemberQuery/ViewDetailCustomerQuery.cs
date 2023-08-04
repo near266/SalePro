@@ -29,7 +29,6 @@ namespace OrderSvc.Application.Query.PackageMemberQuery
         public async Task<ProfileRes> Handle(ViewDetailCustomerQuery rq, CancellationToken cancellationToken)
         {
             var result = await _repo.GetDetailCus(rq.Id);
-            var res = new ProfileRes();
 
             var map = _mapper.Map<ProfileRes>(result.profileCustomer);
             map.CompanyName=result.CompanyName;
