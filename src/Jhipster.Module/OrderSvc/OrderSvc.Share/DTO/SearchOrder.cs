@@ -17,4 +17,11 @@ namespace OrderSvc.Share.DTO
         public double? discount { get; set; }
         public double? finalPrice { get; set; }
     }
+    public class TotalResponse {
+        public int TotalVoucher {  get; set; }
+        public int TotalPtoduct { get; set; }
+        public int TotalRequestUpgrade { get; set; }
+        public int TotalOrder { get; set; }   
+    }
+
 }

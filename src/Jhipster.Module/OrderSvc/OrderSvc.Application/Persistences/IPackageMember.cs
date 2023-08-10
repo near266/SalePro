@@ -33,5 +33,7 @@ namespace OrderSvc.Application.Persistences
         Task<PagedList<PackageDto>> SearchPackageInfo(int? status, int page, int pageSize);
 
         Task<PackageDto> GetCurrentStatusByIdUser(Guid userId);
+
+        Task<TotalResponse> GetTotal();
     }
 }

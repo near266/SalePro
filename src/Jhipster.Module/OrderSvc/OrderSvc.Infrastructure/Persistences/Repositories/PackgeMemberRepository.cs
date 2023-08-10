@@ -218,9 +218,9 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             var obj =  await _Db.infoPackages.Where(i=>i.Id.Equals(Id)).Include(i=>i.ProfileCustomer).Select(i=>new PackageDto
             {
                 UserId=i.ProfileMemberId,
-                StatusCus=i.ProfileCustomer.Status,
+                Avatar = _Db.profileCustomer.Where(a => a.Id.Equals(i.ProfileMemberId)).Select(a => a.Avatar).FirstOrDefault(),
+                StatusCus = i.ProfileCustomer.Status,
                 CurrentStatus = i.CurrentStatusMember,
-
                 UserName = _Db.profileCustomer.Where(a=>a.Id.Equals(i.ProfileMemberId)).Select(a=>a.Username).FirstOrDefault(),
                 CustomerName= _Db.profileCustomer.Where(a=>a.Id.Equals(i.ProfileMemberId)).Select(a=>a.CustomerName).FirstOrDefault(),
                 status=i.status,
@@ -256,6 +256,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                 .Select(i => new PackageDto()
                 {
                     UserId = i.ProfileMemberId,
+                    Avatar=_Db.profileCustomer.Where(a=>a.Id.Equals(i.ProfileMemberId)).Select(a=>a.Avatar).FirstOrDefault(),
                     CurrentStatus = i.CurrentStatusMember,
                     StatusCus = i.ProfileCustomer.Status,
                     UserName = _Db.profileCustomer.Where(a => a.Id.Equals(i.ProfileMemberId)).Select(a => a.Username).FirstOrDefault(),
@@ -283,7 +284,8 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             {
 
                 UserId = i.ProfileMemberId,
-                CurrentStatus=i.CurrentStatusMember,
+                Avatar = _Db.profileCustomer.Where(a => a.Id.Equals(i.ProfileMemberId)).Select(a => a.Avatar).FirstOrDefault(),
+                CurrentStatus = i.CurrentStatusMember,
                 StatusCus = i.ProfileCustomer.Status,
                 UserName = _Db.profileCustomer.Where(a => a.Id.Equals(i.ProfileMemberId)).Select(a => a.Username).FirstOrDefault(),
                 CustomerName = _Db.profileCustomer.Where(a => a.Id.Equals(i.ProfileMemberId)).Select(a => a.CustomerName).FirstOrDefault(),
@@ -293,6 +295,25 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             if(obj == null) { throw new ArgumentException("ProfileMemberId is not exits"); }
             return obj;
 
+        }
+
+        public  async Task<TotalResponse> GetTotal()
+        {
+            var TotalOrder = _Db.orders.Count();
+            var TotalPtoduct = _Db.products.Count();
+            var TotalRequestUpgrade = _Db.infoPackages.Where(i => i.status == 1 || i.status == 2).Count();
+            var TotalVoucher = _Db.vouchers.Count();
+            var res = new TotalResponse
+            { 
+                TotalOrder= TotalOrder,
+                TotalPtoduct= TotalPtoduct,
+                TotalRequestUpgrade= TotalRequestUpgrade,
+                TotalVoucher= TotalVoucher
+               
+            };
+            if (res == null) { throw new ArgumentException("not found"); }
+           
+            return res;
         }
 
         //public async Task<int> GetStatusPackge(Guid Id)

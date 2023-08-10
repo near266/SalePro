@@ -9,6 +9,7 @@ namespace OrderSvc.Share.DTO
     public class PackageDto
     {
         public Guid? UserId { get; set; }
+        public string? Avatar { get; set; }
         public int? status { get; set; }
         public int? CurrentStatus {  get; set; }    
         public string? UserName { get; set; }

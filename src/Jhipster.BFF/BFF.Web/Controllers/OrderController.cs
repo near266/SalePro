@@ -13,6 +13,7 @@ using OrderSvc.Application.Query.CompanyQuery;
 using OrderSvc.Application.Command.OrderCommand;
 using OrderSvc.Application.Command.TransactionsCommand;
 using OrderSvc.Application.Query.OrderQuery;
+using OrderSvc.Application.Query.PackageMemberQuery;
 
 namespace BFF.Web.Controllers
 {
@@ -411,5 +412,19 @@ namespace BFF.Web.Controllers
             return StatusCode(500, e.Message);
         }
     }
-}
+        [HttpGet("Order/GetAllTotal")]
+        public async Task<IActionResult> GetAllTotal ()
+        {
+            try
+            {
+                var rq = new GetTotalQ { };
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+    }
 }
