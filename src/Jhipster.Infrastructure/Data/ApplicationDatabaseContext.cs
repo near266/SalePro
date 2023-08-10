@@ -45,6 +45,8 @@ namespace Jhipster.Infrastructure.Data
         public DbSet<VoucherProductCustomer> voucherProductsCustomer { get; set; }
         public DbSet<Voucher> vouchers { get; set; }
         public DbSet<Affiliates> affiliates { get; set; }
+        public DbSet<InfoPackageMember> infoPackages { get; set; }
+
 
         #endregion
 

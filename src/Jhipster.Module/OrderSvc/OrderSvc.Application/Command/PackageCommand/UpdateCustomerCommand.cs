@@ -19,6 +19,7 @@ namespace OrderSvc.Application.Command.PackageCommand
         public string CustomerName { get; set; }
         public string Username { get; set; }
         public DateTime? DOB { get; set; }
+        public int? Status { get; set; }
 
         public Guid? CompanyId { get; set; }
 

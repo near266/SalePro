@@ -34,6 +34,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
         {
             var check = await _Db.categories.FirstOrDefaultAsync(i=>i.Id==id);
             if (check == null) { throw new ArgumentException("not foud"); }
+            _Db.categories.Remove(check);
             return await _Db.SaveChangesAsync();
         }
 

@@ -236,5 +236,106 @@ namespace BFF.Web.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+        [HttpPost("Member/AddInfoPackage")]
+        public async Task<IActionResult> AddInfoPackage([FromBody] AddInfoPackageRq rq)
+        {
+            try
+            {
+                var getUser = new ViewDetailCustomerQuery
+                {
+                    Id = (Guid) rq.UserId,
+                };
+                var user = await _mediator.Send(getUser);
+
+                var AddInfoRq = new AddInfoPackageC {
+                    Id=Guid.NewGuid(),
+                    ProfileMemberId=rq.UserId,
+                    CurrentStatusMember= rq.Type ==1? 1: rq.Type==2? 2 :0,
+                    status=rq.Type,
+                };
+                var AddInfo = await _mediator.Send(AddInfoRq);
+
+                var updateStatusRq = new UpdateCustomerCommand { Id = (Guid)rq.UserId, Status = rq.Type==1? 1 : rq.Type==2? 2: 0 };
+                var updateStatus = await _mediator.Send(updateStatusRq);
+
+                var view = new GetInfoPackageQ { Id=AddInfo.Id };
+                var response = await _mediator.Send(view);
+
+
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+        [HttpPost("Member/ApproveOrDeny")]
+        public async Task<IActionResult> ApproveOrDeny ([FromBody] ApproveOrDenyRq rq)
+        {
+            try
+            {
+                if (rq.Approve == true)
+                {
+                    foreach(var item in rq.UserId)
+                    {
+                        var getstatusrq = new GetCurrentStatusByIdUserQ { Id =item};
+                        var getstatus = await _mediator.Send(getstatusrq);
+
+                        var up = new UpdateCustomerCommand
+                        {
+                            Id = item,
+                            Status= 0,
+                            memberShip=getstatus.CurrentStatus,
+                            
+                        };
+                       await _mediator.Send(up);
+
+                    }
+                }
+                else
+                {
+                    foreach (var item in rq.UserId)
+                    {
+                        var getstatusrq = new GetCurrentStatusByIdUserQ { Id = item };
+                        var getstatus = await _mediator.Send(getstatusrq);
+
+                        var up = new UpdateCustomerCommand
+                        {
+                            Id = item,
+                            Status = getstatus.CurrentStatus==1? 3 : getstatus.CurrentStatus==2 ? 4 : -1,
+                            memberShip = getstatus.CurrentStatus,
+
+                        };
+                        await _mediator.Send(up);
+
+                    }
+                }
+               
+               
+                
+                return Ok(rq.UserId);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [HttpPost("Member/SearchStatus")]
+        public async Task<IActionResult> SearchStatus([FromBody] SearchPackageInfoQ rq)
+        {
+            try
+            {
+
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+
     }
 }

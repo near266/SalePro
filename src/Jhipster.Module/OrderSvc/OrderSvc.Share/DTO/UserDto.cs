@@ -19,7 +19,7 @@ namespace OrderSvc.Share.DTO
         public DateTime? DOB { get; set; }
 
         public Guid? CompanyId { get; set; }
-
+        public int? Status { get; set; }
         public string? Position { get; set; }
         public string? Decripstion { get; set; }
         public string? ProductName { get; set; }

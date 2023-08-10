@@ -15,6 +15,7 @@ namespace OrderSvc.Application.Query.PackageMemberQuery
 {
     public class GetAllOrSearchQuery : IRequest<PagedList<ProfileRes>>
     {
+       
         public string? name { get; set; }
         public int page {  get; set; }
         public int  pageSize { get; set; }

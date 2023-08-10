@@ -39,4 +39,11 @@ namespace BFF.Web.DTOs
         public int? Role { get; set; }
         public int? memberShip { get; set; }
     }
+
+    public class ApproveOrDenyRq 
+    { 
+     public bool? Approve { get; set; }
+     public List<Guid>? UserId { get; set; }
+    }
+
 }

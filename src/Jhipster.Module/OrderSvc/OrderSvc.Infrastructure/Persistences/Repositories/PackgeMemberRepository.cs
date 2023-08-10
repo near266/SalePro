@@ -10,12 +10,15 @@ using OrderSvc.Share.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace OrderSvc.Infrastructure.Persistences.Repositories
 {
+
     public class PackgeMemberRepository :IPackageMember
     {
         private readonly OrderSvcDbContext _Db;
@@ -82,32 +85,31 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             return obj;
         }
 
-        //public  async Task<PagedList<PackageMember>> SearchOrDetail(Guid? Id, string name, int page, int pageSize)
-        //{
-        //    var query = _Db.packageMembers.AsQueryable();
-        //    if (Id != null)
-        //    {
-        //        query = query.Where(i => i.Id.Equals(Id));
-        //    }
-        //    if (name != null)
-        //    {
-        //        query = query.Where(i => !string.IsNullOrEmpty(i.PackageName) && i.PackageName.ToLower().Contains(name.ToLower().Trim()));
+        public async Task<PagedList<PackageMember>> SearchOrDetailPackge(int? status, int page, int pageSize)
+        {
 
-        //    }
-           
-        //    var sQuery = query;
-        //    var sQuery1 = await sQuery.Skip(pageSize * (page - 1))
-        //                        .Take(pageSize)
-        //                        .ToListAsync();
-        //    var reslist = await sQuery.ToListAsync();
-        //    return new PagedList<PackageMember>
-        //    {
-        //        Data = sQuery1,
-        //        TotalCount = reslist.Count,
-        //    };
-        //}
+            var query = _Db.packageMembers.AsQueryable();
 
-        public async Task<PagedList<ProfileRes>> SearchOrDetail(string? name, int page, int pageSize)
+            if (status != null)
+            {
+                query = query.Where(i =>i.StatusPackage.Equals(status));
+
+            }
+
+
+            var sQuery = query;
+            var sQuery1 = await sQuery.Skip(pageSize * (page - 1))
+                                .Take(pageSize)
+                                .ToListAsync();
+            var reslist = await sQuery.ToListAsync();
+            return new PagedList<PackageMember>
+            {
+                Data = sQuery1,
+                TotalCount = reslist.Count,
+            };
+        }
+
+        public async Task<PagedList<ProfileRes>> SearchOrDetail( string? name, int page, int pageSize)
         {
             var query = _Db.profileCustomer.AsQueryable();
 
@@ -116,6 +118,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                 query = query.Where(i => !string.IsNullOrEmpty(i.CustomerName) && i.CustomerName.ToLower().Contains(name.ToLower().Trim()));
 
             }
+         
 
             var sQuery = query;
             var sQuery1 =  sQuery
@@ -125,6 +128,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                    CustomerName= i.CustomerName,
                    Username= i.Username,
                    CompanyId= i.CompanyId,
+                   Status=i.Status,
                    DOB= i.DOB,
                    Position= i.Position,
                    Decripstion= i.Decripstion,
@@ -177,6 +181,129 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             }
             return 0;
         }
+
+        public async Task<InfoPackageMember> AddInfo(InfoPackageMember packageMember)
+        {
+             await _Db.infoPackages.AddAsync(packageMember);
+            await _Db.SaveChangesAsync();
+            return packageMember;
+        }
+
+        public async Task<int> UpdateInfo(InfoPackageMember packageMember)
+        {
+            var obj = await _Db.infoPackages.FirstOrDefaultAsync(i => i.Id.Equals(packageMember.Id));
+            if(obj == null)
+            {
+                throw new ArgumentException("not found");
+
+            }
+            _mapper.Map(packageMember, obj);
+            return await _Db.SaveChangesAsync();
+        }
+
+        public async Task<int> DeleteInfo(Guid? Id)
+        {
+           var obj = _Db.infoPackages.FirstOrDefault(i => i.Id == Id);
+            if(obj == null)
+            {
+                throw new ArgumentException("not found");
+
+            }
+            _Db.Remove(obj);
+            return await _Db.SaveChangesAsync();
+        }
+
+        public async Task<PackageDto> GetInfoPackageMember(Guid? Id)
+        {
+            var obj =  await _Db.infoPackages.Where(i=>i.Id.Equals(Id)).Include(i=>i.ProfileCustomer).Select(i=>new PackageDto
+            {
+                UserId=i.ProfileMemberId,
+                StatusCus=i.ProfileCustomer.Status,
+                CurrentStatus = i.CurrentStatusMember,
+
+                UserName = _Db.profileCustomer.Where(a=>a.Id.Equals(i.ProfileMemberId)).Select(a=>a.Username).FirstOrDefault(),
+                CustomerName= _Db.profileCustomer.Where(a=>a.Id.Equals(i.ProfileMemberId)).Select(a=>a.CustomerName).FirstOrDefault(),
+                status=i.status,
+                
+
+
+            }).FirstOrDefaultAsync();
+            if(obj == null)
+            {
+                throw new ArgumentException("not found");
+
+            }
+            
+            return obj;
+
+        }
+         
+
+
+        public async Task<PagedList<PackageDto>> SearchPackageInfo(int? status, int page, int pageSize)
+        {
+            var query = _Db.infoPackages.OrderBy(i=>i.status).AsQueryable();
+
+            if (status != null)
+            {
+                query = query.Where(i=>i.status.Equals(status));
+
+            }
+
+
+            var sQuery = query;
+            var sQuery1 = sQuery
+                .Select(i => new PackageDto()
+                {
+                    UserId = i.ProfileMemberId,
+                    CurrentStatus = i.CurrentStatusMember,
+                    StatusCus = i.ProfileCustomer.Status,
+                    UserName = _Db.profileCustomer.Where(a => a.Id.Equals(i.ProfileMemberId)).Select(a => a.Username).FirstOrDefault(),
+                    CustomerName = _Db.profileCustomer.Where(a => a.Id.Equals(i.ProfileMemberId)).Select(a => a.CustomerName).FirstOrDefault(),
+                    status = i.status,
+                })
+                .Skip(pageSize * (page - 1))
+
+                                .Take(pageSize)
+                                .ToList();
+            var reslist = await sQuery.ToListAsync();
+            return new PagedList<PackageDto>
+            {
+                Data = sQuery1,
+                TotalCount = reslist.Count,
+                Page = page,
+                PageSize = pageSize
+
+            };
+        }
+
+        public async Task<PackageDto> GetCurrentStatusByIdUser(Guid userId)
+        {
+            var obj = await _Db.infoPackages.Where(i => i.ProfileMemberId.Equals(userId)).Select(i=>new PackageDto()
+            {
+
+                UserId = i.ProfileMemberId,
+                CurrentStatus=i.CurrentStatusMember,
+                StatusCus = i.ProfileCustomer.Status,
+                UserName = _Db.profileCustomer.Where(a => a.Id.Equals(i.ProfileMemberId)).Select(a => a.Username).FirstOrDefault(),
+                CustomerName = _Db.profileCustomer.Where(a => a.Id.Equals(i.ProfileMemberId)).Select(a => a.CustomerName).FirstOrDefault(),
+                status = i.status,
+
+            }).FirstOrDefaultAsync();
+            if(obj == null) { throw new ArgumentException("ProfileMemberId is not exits"); }
+            return obj;
+
+        }
+
+        //public async Task<int> GetStatusPackge(Guid Id)
+        //{
+        //    var obj = await _Db.packageMembers.FirstOrDefaultAsync(i => i.Id == Id);
+        //    if(obj == null)
+        //    {
+        //        return -1;
+        //    }
+        //    return (int) obj.Status;
+        //}
     }
 
 }

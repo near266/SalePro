@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Jhipster.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Jhipster.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDatabaseContext))]
-    partial class ApplicationDatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230808081225_page")]
+    partial class page
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -417,53 +419,6 @@ namespace Jhipster.Infrastructure.Migrations
                     b.ToTable("companies");
                 });
 
-            modelBuilder.Entity("OrderSvc.Domain.Entities.InfoPackageMember", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int?>("CurrentStatusMember")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("PackageId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("PackageMemberId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ProfileCustomerId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("ProfileMemberId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int?>("status")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PackageMemberId");
-
-                    b.HasIndex("ProfileCustomerId");
-
-                    b.ToTable("infoPackages");
-                });
-
             modelBuilder.Entity("OrderSvc.Domain.Entities.Order", b =>
                 {
                     b.Property<Guid>("Id")
@@ -546,13 +501,13 @@ namespace Jhipster.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int?>("StatusPackage")
+                    b.Property<int?>("Status")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -663,9 +618,6 @@ namespace Jhipster.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<int?>("Role")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("Status")
                         .HasColumnType("integer");
 
                     b.Property<string>("Username")
@@ -866,21 +818,6 @@ namespace Jhipster.Infrastructure.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("OrderSvc.Domain.Entities.InfoPackageMember", b =>
-                {
-                    b.HasOne("OrderSvc.Domain.Entities.PackageMember", "PackageMember")
-                        .WithMany()
-                        .HasForeignKey("PackageMemberId");
-
-                    b.HasOne("OrderSvc.Domain.Entities.ProfileCustomer", "ProfileCustomer")
-                        .WithMany()
-                        .HasForeignKey("ProfileCustomerId");
-
-                    b.Navigation("PackageMember");
-
-                    b.Navigation("ProfileCustomer");
                 });
 
             modelBuilder.Entity("OrderSvc.Domain.Entities.Order", b =>
