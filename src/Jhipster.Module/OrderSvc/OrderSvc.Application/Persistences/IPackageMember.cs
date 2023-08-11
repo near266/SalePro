@@ -30,7 +30,7 @@ namespace OrderSvc.Application.Persistences
         Task<int> UpdateInfo(InfoPackageMember packageMember);
         Task<int> DeleteInfo(Guid? Id); 
         Task<PackageDto> GetInfoPackageMember(Guid? Id);
-        Task<PagedList<PackageDto>> SearchPackageInfo(int? status, int page, int pageSize);
+        Task<PagedList<PackageDto>> SearchPackageInfo(List<int>? status, int page, int pageSize);
 
         Task<PackageDto> GetCurrentStatusByIdUser(Guid userId);
 

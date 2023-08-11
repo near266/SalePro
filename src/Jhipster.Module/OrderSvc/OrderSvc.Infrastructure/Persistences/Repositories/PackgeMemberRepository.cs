@@ -240,13 +240,13 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
          
 
 
-        public async Task<PagedList<PackageDto>> SearchPackageInfo(int? status, int page, int pageSize)
+        public async Task<PagedList<PackageDto>> SearchPackageInfo(List<int>? status, int page, int pageSize)
         {
             var query = _Db.infoPackages.OrderBy(i=>i.status).AsQueryable();
 
             if (status != null)
             {
-                query = query.Where(i=>i.status.Equals(status));
+                query = query.Where(i=>status.Contains((int) i.status));
 
             }
 

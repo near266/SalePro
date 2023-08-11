@@ -14,7 +14,7 @@ namespace OrderSvc.Application.Query.PackageMemberQuery
 {
     public class SearchPackageInfoQ:IRequest<PagedList<PackageDto>>
     {
-        public int? status { get; set; }    
+        public List<int>? status { get; set; }    
         public int page { get; set; }
         public int pageSize { get; set; }
     }
