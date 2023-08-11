@@ -77,6 +77,7 @@ namespace OrderSvc.Application.Configurations.Mappers
             CreateMap<InfoPackageMember, InfoPackageMember>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
             CreateMap<InfoPackageMember, AddInfoPackageC>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
             CreateMap<InfoPackageMember, PackageDto>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+            CreateMap<InfoPackageMember, UpdateInfoPackageC>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
 
 
         }

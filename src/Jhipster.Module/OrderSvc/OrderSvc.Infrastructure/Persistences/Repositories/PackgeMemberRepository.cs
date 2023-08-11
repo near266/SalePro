@@ -282,7 +282,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
         {
             var obj = await _Db.infoPackages.Where(i => i.ProfileMemberId.Equals(userId)).Select(i=>new PackageDto()
             {
-
+                Id=i.Id,
                 UserId = i.ProfileMemberId,
                 Avatar = _Db.profileCustomer.Where(a => a.Id.Equals(i.ProfileMemberId)).Select(a => a.Avatar).FirstOrDefault(),
                 CurrentStatus = i.CurrentStatusMember,

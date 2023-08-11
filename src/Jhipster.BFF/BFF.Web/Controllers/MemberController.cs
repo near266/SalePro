@@ -280,7 +280,12 @@ namespace BFF.Web.Controllers
                     {
                         var getstatusrq = new GetCurrentStatusByIdUserQ { Id =item};
                         var getstatus = await _mediator.Send(getstatusrq);
-
+                        var IfoStatusRq = new UpdateInfoPackageC()
+                        {
+                            Id = getstatus.Id,
+                            status = 0,
+                        };
+                        await _mediator.Send(IfoStatusRq);
                         var up = new UpdateCustomerCommand
                         {
                             Id = item,
@@ -298,7 +303,12 @@ namespace BFF.Web.Controllers
                     {
                         var getstatusrq = new GetCurrentStatusByIdUserQ { Id = item };
                         var getstatus = await _mediator.Send(getstatusrq);
-
+                        var IfoStatusRq = new UpdateInfoPackageC()
+                        {
+                            Id = getstatus.Id,
+                            status = getstatus.CurrentStatus == 1 ? 3 : getstatus.CurrentStatus == 2 ? 4 : -1,
+                        };
+                        await _mediator.Send(IfoStatusRq);
                         var up = new UpdateCustomerCommand
                         {
                             Id = item,
