@@ -293,7 +293,7 @@ namespace BFF.Web.Controllers
                             memberShip=getstatus.CurrentStatus,
                             
                         };
-                       await _mediator.Send(up);
+                await _mediator.Send(up);
 
                     }
                 }
