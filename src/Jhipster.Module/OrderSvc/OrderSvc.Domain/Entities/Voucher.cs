@@ -17,6 +17,7 @@ namespace OrderSvc.Domain.Entities
         public VoucherProductCustomer? VoucherProductCustomer { get; set; }
         public string CodeVoucher { get;set; }
         public List<string>? Image { get; set; }
+        public int? isExpired { get;set; }
         public string? Description { get;set; }
         public decimal? Discount { get;set; }
         public int ? Status { get;set; }

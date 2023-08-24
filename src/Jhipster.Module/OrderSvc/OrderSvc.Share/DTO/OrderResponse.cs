@@ -1,7 +1,9 @@
-﻿using System;
+﻿using OrderSvc.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OrderSvc.Share.DTO
@@ -23,12 +25,16 @@ namespace OrderSvc.Share.DTO
         public AffiliateDTO? affiliate { get; set; }
         public ProductDTOs? product { get; set; }
         public Payment? payment { get; set; }
+        [JsonIgnore]
+        public IEnumerable<OrderItem>? OrderItem { get; set; }
+
 
 
 
     }
     public class AffiliateDTO
     {
+        public Guid? AffiId { get; set; }
         public Guid? ReferrerId { get; set; }
         public string? ReferrerName { get; set; }
         public double? ReferrerRevenue { get; set; }

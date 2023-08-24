@@ -96,7 +96,7 @@ namespace BFF.Web.Controllers
                 rq.LastModifiedDate = DateTime.Now;
                 rq.LastModifiedBy = GetUsernameFromContext();
                 var res = await _mediator.Send(rq);
-                var view = new GetProductDetailQuery { Id = (Guid) rq.Id };
+                var view = new GetProductDetailQuery { Id = (Guid)rq.Id };
                 var result = await _mediator.Send(view);
                 return Ok(result);
             }
@@ -152,7 +152,7 @@ namespace BFF.Web.Controllers
             }
         }
 
-          //COMPANY
+        //COMPANY
         [HttpPost("Company/Create")]
         public async Task<IActionResult> CreatCompany([FromBody] CreateCompanyCommand rq)
         {
@@ -192,7 +192,7 @@ namespace BFF.Web.Controllers
                 return StatusCode(500, e.Message);
             }
         }
-       //  Category
+        //  Category
         [HttpPost("Category/Create")]
         public async Task<IActionResult> CreatCategory([FromBody] CreateCategoryCommand rq)
         {
@@ -253,78 +253,164 @@ namespace BFF.Web.Controllers
             }
         }
 
-       // <summary>
-       // Tạo giao dịch
-       // </summary>
+        // <summary>
+        // Tạo giao dịch
+        // </summary>
         [HttpPost("Order/Create")]
 
         public async Task<IActionResult> CreatOrder([FromBody] TransactionDto rq)
         {
-            _logger.LogInformation($"REST request Create Category : {JsonConvert.SerializeObject(rq)}");
+            _logger.LogInformation($"REST request Create Order : {JsonConvert.SerializeObject(rq)}");
 
             try
             {
-                rq.Id = Guid.NewGuid();
-                // tao phien giao dich
-                var tran = new AddTransactionsCommand
+                if (rq.Id != null)
                 {
-                    TransactionName = rq.TransactionName,
-                    TransactionType = rq.TransactionType,
-                    TransactionDate = rq.TransactionDate == null ? DateTime.Now : rq.TransactionDate,
-                    PaymentMethod = rq.PaymentMethod,
-                    TotalAmount = rq.TotalAmount,
-
-
-                };
-                var tranres = await _mediator.Send(tran);
-               //  nhap affiiate
-                var aff = new AddAffiliateCommand
-                {
-                    BuyerId = rq.BuyerId,
-                    SalerId = rq.SalerId,
-                    ReferrerId = rq.ReferrerId,
-                    ParticipantsId = rq.ParticipantsId,
-                };
-
-
-                var affires = await _mediator.Send(aff);
-
-//                 Order
-                var order = new CreateOrderCommand
-                {
-                    Id = rq.Id,
-                    BoughtPerson = rq.BoughtPerson,
-                    SalePerson = rq.SalePerson,
-                    TransactionId = tranres.TransactionId,
-                    AffiliateId = affires.Id,
-                    VoucherId = rq.VoucherId,
-                    Status = 0,
-                    CreatedDate=DateTime.Now,
-                };
-                var res = await _mediator.Send(order);
-
-                // ProductaddOrder
-                foreach (var p in rq.Products)
-                {
-
-                    var pr = new CreateOrderItemC
+                    var Order = new ViewDetailOrderQuery()
                     {
-                      Id=Guid.NewGuid(),
-                      OrderId=rq.Id,
-                      ProductId=p.ProductId,
-                      Quantity=p.quantity,
+                        Id = (Guid)rq.Id,
+                    };
+                    var orderes = await _mediator.Send(Order);
+                    var UpTrasRq = new UpdateTransactionsCommand()
+                    {
+                        TransactionId = orderes.TransactionId,
+                        TransactionName = rq.TransactionName,
+                        TransactionType = rq.TransactionType,
+                        TransactionDate = rq.TransactionDate == null ? DateTime.Now : rq.TransactionDate,
+                        PaymentMethod = rq.PaymentMethod,
+                        TotalAmount = rq.TotalAmount,
+                    };
+                    await _mediator.Send(UpTrasRq);
+                    var UpAff = new UpdateAffiliateC()
+                    {
+                        Id = orderes.affiliate.AffiId,
+                        BuyerId = rq.BuyerId,
+                        ProviderId = rq.ProviderId,
+                        SalerId = rq.SalerId,
+                        ReferrerId = rq.ReferrerId,
+                        ParticipantsId = rq.ParticipantsId,
 
                     };
-                    var prores = await _mediator.Send(pr);
+                    await _mediator.Send(UpAff);
+
+                    var orderUp = new UpdateStatusOrderCommand()
+                    {
+                        Id = (Guid)rq.Id,
+                        BoughtPerson = rq.BoughtPerson,
+                        SalePerson = rq.SalePerson,
+
+                        VoucherId = rq.VoucherId,
+                        LastModifiedDate = DateTime.Now,
+
+                    };
+                    var resUpOrder = await _mediator.Send(orderUp);
+                    if (orderes.OrderItem != null)
+                    {
+
+                    foreach (var i in orderes.OrderItem)
+                    {
+                       
+                        foreach (var p in rq.Products)
+                        {
+
+                            var pr = new UpdateOrderItemC
+                            {
+                                Id = i.Id,
+                                OrderId=(Guid) rq.Id,
+                                ProductId = p.ProductId,
+                                Quantity = p.quantity,
+
+                            };
+                             await _mediator.Send(pr);
+                        }
+                    }
+                    }
+                    else
+                    {
+                        foreach (var p in rq.Products)
+                        {
+
+                            var pr = new CreateOrderItemC
+                            {
+                                Id = Guid.NewGuid(),
+                                OrderId = (Guid)rq.Id,
+                                ProductId = p.ProductId,
+                                Quantity = p.quantity,
+
+                            };
+                            await _mediator.Send(pr);
+                        }
+                    }
+                }
+                else
+                {
+
+
+                    //Create
+                    rq.Id = Guid.NewGuid();
+                    // tao phien giao dich
+                    var tran = new AddTransactionsCommand
+                    {
+                        TransactionName = rq.TransactionName,
+                        TransactionType = rq.TransactionType,
+                        TransactionDate = rq.TransactionDate == null ? DateTime.Now : rq.TransactionDate,
+                        PaymentMethod = rq.PaymentMethod,
+                        TotalAmount = rq.TotalAmount,
+
+
+                    };
+                    var tranres = await _mediator.Send(tran);
+                    //  nhap affiiate
+                    var aff = new AddAffiliateCommand
+                    {
+                        BuyerId = rq.BuyerId,
+                        ProviderId = rq.ProviderId,
+                        SalerId = rq.SalerId,
+                        ReferrerId = rq.ReferrerId,
+                        ParticipantsId = rq.ParticipantsId,
+                    };
+
+
+                    var affires = await _mediator.Send(aff);
+
+                    //                 Order
+                    var order = new CreateOrderCommand
+                    {
+                        Id = (Guid)rq.Id,
+                        BoughtPerson = rq.BoughtPerson,
+                        SalePerson = rq.SalePerson,
+                        TransactionId = tranres.TransactionId,
+                        AffiliateId = affires.Id,
+                        VoucherId = rq.VoucherId,
+                        Status = 0,
+                        CreatedDate = DateTime.Now,
+                    };
+                    var res = await _mediator.Send(order);
+
+                    // ProductaddOrder
+                    foreach (var p in rq.Products)
+                    {
+
+                        var pr = new CreateOrderItemC
+                        {
+                            Id = Guid.NewGuid(),
+                            OrderId = (Guid)rq.Id,
+                            ProductId = p.ProductId,
+                            Quantity = p.quantity,
+
+                        };
+                        var prores = await _mediator.Send(pr);
+                    }
                 }
 
                 var view = new ViewDetailOrderQuery
                 {
-                    Id = rq.Id,
+                    Id = (Guid)rq.Id,
                 };
                 var result = await _mediator.Send(view);
 
-                return Ok(result);
+                var resOrder = _mapper.Map<ResponseSearchOrderDto>(result);
+                return Ok(resOrder);
             }
             catch (Exception e)
             {
@@ -365,13 +451,13 @@ namespace BFF.Web.Controllers
             {
 
                 var res = await _mediator.Send(rq);
-                foreach(var item in res.Data)
+                foreach (var item in res.Data)
                 {
-                var p = new PriceIdComand { Id=item.Id };
-                 var price = await _mediator.Send(p);
+                    var p = new PriceIdComand { Id = item.Id };
+                    var price = await _mediator.Send(p);
                     item.total = price.total;
-                    item.discount= price.discount;
-                    item.finalPrice= price.finalPrice;
+                    item.discount = price.discount;
+                    item.finalPrice = price.finalPrice;
                 }
 
                 return Ok(res);
@@ -382,38 +468,38 @@ namespace BFF.Web.Controllers
 
                 return StatusCode(500, e.Message);
             }
-    }
+        }
 
-    [HttpPost("Order/UpdateStatus")]
+        [HttpPost("Order/UpdateStatus")]
 
-    public async Task<IActionResult> UpdateStatusOrder([FromBody] UpdateStatusRq rq)
-    {
-        _logger.LogInformation($"REST request Create Category : {JsonConvert.SerializeObject(rq)}");
-
-        try
+        public async Task<IActionResult> UpdateStatusOrder([FromBody] UpdateStatusRq rq)
         {
-            var result = 0;
-            foreach (var i in rq.Id)
+            _logger.LogInformation($"REST request Create Category : {JsonConvert.SerializeObject(rq)}");
+
+            try
             {
-                var up = new UpdateStatusOrderCommand
+                var result = 0;
+                foreach (var i in rq.Id)
                 {
-                    Id = i,
-                    Status = rq.Status,
-                };
-                var res = await _mediator.Send(up);
-                result++;
+                    var up = new UpdateStatusOrderCommand
+                    {
+                        Id = i,
+                        Status = rq.Status,
+                    };
+                    var res = await _mediator.Send(up);
+                    result++;
+                }
+                return Ok(result);
             }
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError($"REST request to Create Category fail: {e.Message}");
+            catch (Exception e)
+            {
+                _logger.LogError($"REST request to Create Category fail: {e.Message}");
 
-            return StatusCode(500, e.Message);
+                return StatusCode(500, e.Message);
+            }
         }
-    }
         [HttpGet("Order/GetAllTotal")]
-        public async Task<IActionResult> GetAllTotal ()
+        public async Task<IActionResult> GetAllTotal()
         {
             try
             {

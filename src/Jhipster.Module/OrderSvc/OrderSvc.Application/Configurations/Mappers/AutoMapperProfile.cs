@@ -63,16 +63,20 @@ namespace OrderSvc.Application.Configurations.Mappers
             //Order
 
             CreateMap<Order, Order>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+          
            CreateMap<Order, UpdateStatusOrderCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
 
           CreateMap<Order, CreateOrderCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
             //Affiliate
             CreateMap<Affiliates, Affiliates>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
               CreateMap<Affiliates, AddAffiliateCommand>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+            CreateMap<Affiliates, UpdateAffiliateC>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
 
             // OrderItems
             CreateMap<OrderItem, OrderItem>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+          
             CreateMap<OrderItem, CreateOrderItemC>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+            CreateMap<OrderItem, UpdateOrderItemC>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
             // InfoPackage
             CreateMap<InfoPackageMember, InfoPackageMember>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
             CreateMap<InfoPackageMember, AddInfoPackageC>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));

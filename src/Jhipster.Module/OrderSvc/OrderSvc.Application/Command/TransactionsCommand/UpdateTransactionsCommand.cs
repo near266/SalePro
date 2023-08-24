@@ -15,8 +15,10 @@ namespace OrderSvc.Application.Command.TransactionsCommand
 	public class UpdateTransactionsCommand : IRequest<int>
 	{
 		public string TransactionId { get; set; }
-		public string TransactionType { get; set; }
-		public decimal? TotalAmount { get; set; }
+        public string? TransactionName { get; set; }
+
+        public string TransactionType { get; set; }
+		public double? TotalAmount { get; set; }
 		public DateTime? TransactionDate { get; set; }
 		public string? PaymentMethod { get; set; }
 	}

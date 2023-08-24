@@ -123,7 +123,22 @@ namespace OrderSvc.Controller
 				return StatusCode(500, e.Message);
 			}
 		}
+        [HttpGet("Voucher/Check")]
+        public async Task<IActionResult> ViewCheck([FromQuery] CheckVoucherQuery rq)
+        {
+            _logger.LogInformation($"REST request Get Detail Voucher : {JsonConvert.SerializeObject(rq)}");
+            try
+            {
+                var res = await _mediator.Send(rq);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"REST request Get Detail Voucher fail: {e.Message}");
+                return StatusCode(500, e.Message);
+            }
+        }
 
 
-	}
+    }
 }

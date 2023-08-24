@@ -30,6 +30,13 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             return await _Db.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<Voucher>> CheckVoucherExp()
+        {
+            var check = DateTime.Now;
+           var qr =  await _Db.vouchers.Where(i=>i.EndDate> check).ToListAsync();
+            return qr;
+        }
+
         public async Task<int> DeleteVoucher(Guid Id)
         {
           var obj = await _Db.vouchers.FirstOrDefaultAsync(i=>i.Id == Id);

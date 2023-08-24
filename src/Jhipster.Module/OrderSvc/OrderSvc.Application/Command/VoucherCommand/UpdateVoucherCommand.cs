@@ -23,6 +23,8 @@ namespace OrderSvc.Application.Command.VoucherCommand
         public List<string>? Image { get; set; }
         public string? Description { get; set; }
         public decimal? Discount { get; set; }
+        public int? isExpired { get; set; }
+
         public int? Status { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? EndDate { get; set; }

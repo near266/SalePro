@@ -21,6 +21,7 @@ namespace OrderSvc.Application.Persistences
      
         //Affiliates
        Task<int> AddAffi(Affiliates affiliates);
+        Task<int> UpdateAffi(Affiliates affiliates ,CancellationToken cancellationToken);
 
         Task<PriceDto> Price(List<piricerq> Product, Guid? VoucherId);
 

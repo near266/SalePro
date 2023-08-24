@@ -1,4 +1,6 @@
 using AutoMapper;
+using BFF.Web.DTOs;
+using OrderSvc.Share.DTO;
 
 namespace Jhipster.Configuration.AutoMapper
 {
@@ -6,6 +8,8 @@ namespace Jhipster.Configuration.AutoMapper
     {
         public AutoMapperProfile()
         {
+            CreateMap<OrderResponse, ResponseSearchOrderDto>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
+
             /*CreateMap<User, Dto.UserDto>()
          .ForMember(userDto => userDto.Roles, opt => opt.MapFrom(user => user.UserRoles.Select(iur => iur.Role.Name).ToHashSet()))
      .ReverseMap()
@@ -37,6 +41,7 @@ namespace Jhipster.Configuration.AutoMapper
             CreateMap<MeetingBanner, MeetingBannerResponse>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
             CreateMap<MeetingAction, MeetingAction>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
             CreateMap<MeetingAction, MeetingActionResponse>().ReverseMap().ForAllMembers(x => x.Condition((source, target, sourceValue) => sourceValue != null));
-        */}
+        */
+        }
     }
 }

@@ -21,6 +21,8 @@ namespace OrderSvc.Application.Command.VoucherCommand
         public List<string>? Image { get; set; }
         public string? Description { get; set; }
         public decimal? Discount { get; set; }
+        public int? isExpired { get; set; }
+
         public int? Status { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -41,6 +43,7 @@ namespace OrderSvc.Application.Command.VoucherCommand
 		public async Task<Voucher> Handle(AddVoucherCommand request, CancellationToken cancellationToken)
 		{
 			var value = _mapper.Map<Voucher>(request);
+			value.isExpired = 0;
 			 await _repo.AddVoucher(value);
 			return value;	
 		}

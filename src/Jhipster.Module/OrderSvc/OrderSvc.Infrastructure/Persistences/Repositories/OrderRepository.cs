@@ -3,6 +3,7 @@ using Google.Apis.Upload;
 using InteractiveSvc.Infrastructure.Persistences;
 using Jhipster.Infrastructure.Migrations;
 using Jhipster.Service.Utilities;
+
 using Microsoft.EntityFrameworkCore;
 using OrderSvc.Application.Persistences;
 using OrderSvc.Domain.Entities;
@@ -13,6 +14,7 @@ using System.Linq;
 using System.Security.Cryptography.Xml;
 using System.Security.Permissions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -107,6 +109,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
 
             var affi = order.Select(i => new AffiliateDTO
             {
+                AffiId=AffiQr.Id,
                 SalerId = AffiQr.SalerId,
                 SalerName = User.Where(a => a.Id.Equals(AffiQr.SalerId)).Select(a => a.CustomerName).FirstOrDefault(),
                 ProviderId = AffiQr.ProviderId,
@@ -136,14 +139,15 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                    TransactionType = trsQr.Where(a => a.TransactionId.Equals(i.TransactionId)).Select(a => a.TransactionType).FirstOrDefault(),
                    affiliate = affi,
                    product = prod,
-                   payment = payment
+                   payment = payment,
+                   OrderItem=_Db.orderItems.Where(a=>a.OrderId.Equals(i.Id)).ToList(),
 
                })
                 .AsNoTracking();
-
+            
             return obj.SingleOrDefault();
         }
-
+        
         public async Task<PriceDto> Price(List<piricerq> Product, Guid? VoucherId )
         {
             var res = new PriceDto();
@@ -209,7 +213,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                     .Where(i => i.ProductName.ToLower().Trim().Equals(name.ToLower().Trim()))
                     .AsQueryable();
                 var Idpro = queryPro.Select(i => i.Id).ToList();
-                var orderId = await _Db.orderItems.Where(i => Idpro.Contains(i.ProductId)).ToListAsync();
+                var orderId = await _Db.orderItems.Where(i => Idpro.Contains((Guid)i.ProductId)).ToListAsync();
                 query = query.Where(i => orderId.Select(i=>i.OrderId).Contains(i.Id));
             }
             if (status != null)
@@ -247,19 +251,31 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
             return new PagedList<SearchOrder>
             {
                 Data = result,
-                TotalCount = result.Count(),
+                TotalCount = query.Count(),
                 Page = page,
                 PageSize = pageSize,
             };
         }
 
-        public async Task<int> UpdateOrder(Order order, CancellationToken cancellationToken)
+        public  async Task<int> UpdateAffi(Affiliates affiliates,CancellationToken cancellationToken)
+        {
+            var obj = await _Db.affiliates.FirstOrDefaultAsync(i => i.Id.Equals(affiliates.Id));
+            if (obj != null)
+            {
+           
+                _mapper.Map<Affiliates, Affiliates>(affiliates, obj);
+                return await _Db.SaveChangesAsync(cancellationToken);
+            }
+            return 0;
+        }
+
+        public async Task<int> UpdateOrder(OrderSvc.Domain.Entities. Order order, CancellationToken cancellationToken)
         {
             var obj = await _Db.orders.FirstOrDefaultAsync(i => i.Id.Equals(order.Id));
             if (obj != null)
             {
                 obj.Status = order.Status;
-                _mapper.Map<Order, Order>(obj, order);
+                _mapper.Map<OrderSvc.Domain.Entities.Order, OrderSvc.Domain.Entities.Order> (order, obj);
                 return await _Db.SaveChangesAsync(cancellationToken);
             }
             return 0;
@@ -267,7 +283,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
 
         public async Task<OrderItem> UpdateOrderItem(OrderItem item)
         {
-            var old = await _Db.orderItems.FirstOrDefaultAsync(i=>i.Equals(item.Id));
+            var old = await _Db.orderItems.FirstOrDefaultAsync(i=>i.Id.Equals(item.Id));
             if (old==null)
             {
                 throw new ArgumentException("not found");
