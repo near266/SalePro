@@ -31,6 +31,7 @@ namespace OrderSvc.Application.Query.VoucherQuery
         public async Task<IEnumerable<Voucher>> Handle(CheckVoucherQuery request, CancellationToken cancellationToken)
         {
             return await _repo.CheckVoucherExp();
+            
         }
     }
 }

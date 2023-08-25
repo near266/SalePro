@@ -11,6 +11,7 @@ namespace OrderSvc.Share.DTO
         public Guid Id { get; set; }
         public int? Status { get; set; }
         public string? TransactionId { get; set; }
+        public string? TransactionName { get;set; }
         public ProductDTOs? ProductDTOs { get; set; }
         ////public Payment? payment { get; set; }
         public double? total { get; set; }

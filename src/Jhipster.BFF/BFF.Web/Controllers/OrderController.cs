@@ -300,7 +300,6 @@ namespace BFF.Web.Controllers
                         SalePerson = rq.SalePerson,
 
                         VoucherId = rq.VoucherId,
-                        LastModifiedDate = DateTime.Now,
 
                     };
                     var resUpOrder = await _mediator.Send(orderUp);
@@ -445,7 +444,7 @@ namespace BFF.Web.Controllers
 
         public async Task<IActionResult> SearchOrGetAll([FromBody] SearchOrGetAllQuery rq)
         {
-            _logger.LogInformation($"REST request Create Category : {JsonConvert.SerializeObject(rq)}");
+            _logger.LogInformation($"REST request SearchOrGetall: {JsonConvert.SerializeObject(rq)}");
 
             try
             {
@@ -498,6 +497,8 @@ namespace BFF.Web.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
+
         [HttpGet("Order/GetAllTotal")]
         public async Task<IActionResult> GetAllTotal()
         {

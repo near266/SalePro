@@ -130,6 +130,16 @@ namespace OrderSvc.Controller
             try
             {
                 var res = await _mediator.Send(rq);
+				foreach (var item in res)
+				{
+
+					var up = new UpdateVoucherCommand()
+					{
+						Id = item.Id,
+						isExpired = 0,
+					};
+					await _mediator.Send(up);
+				} 
                 return Ok(res);
             }
             catch (Exception e)

@@ -43,7 +43,7 @@ namespace OrderSvc.Application.Command.VoucherCommand
 		public async Task<Voucher> Handle(AddVoucherCommand request, CancellationToken cancellationToken)
 		{
 			var value = _mapper.Map<Voucher>(request);
-			value.isExpired = 0;
+			value.isExpired = 1;
 			 await _repo.AddVoucher(value);
 			return value;	
 		}

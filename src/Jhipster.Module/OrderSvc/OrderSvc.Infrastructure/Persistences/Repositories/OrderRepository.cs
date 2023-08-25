@@ -226,6 +226,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                 Id = i.Id,
                 Status=i.Status,
                 TransactionId = i.TransactionId,
+                TransactionName= _Db.Transactions.Where(a=>a.TransactionId==i.TransactionId).Select(a=>a.TransactionName).FirstOrDefault(),
                 ProductDTOs = new ProductDTOs
                 {
                     products = _Db.orderItems.Where(a=>a.OrderId.Equals(i.Id)).Select(a => new product
@@ -236,6 +237,7 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
                         price = a.Product.Price,
                         CateId = a.Product.CategoryProduct.CategoryId,
                         CateName = a.Product.CategoryProduct.Category.CategoryName,
+                        
                         Quantity=a.Quantity
                     }).ToList(),
 
