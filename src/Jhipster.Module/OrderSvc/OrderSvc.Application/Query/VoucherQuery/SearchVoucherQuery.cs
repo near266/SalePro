@@ -33,6 +33,7 @@ namespace OrderSvc.Application.Query.VoucherQuery
 
 		public async Task<PagedList<Voucher>> Handle(SearchVoucherQuery request, CancellationToken cancellationToken)
 		{
+
 			return await _repo.SearchVoucher(request.CodeVoucher, request.page, request.pageSize);
 		}
 	}

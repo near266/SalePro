@@ -2,10 +2,12 @@
 using InteractiveSvc.Infrastructure.Persistences;
 using Jhipster.Service.Utilities;
 using MediatR;
+using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 using OrderSvc.Application.Persistences;
 using OrderSvc.Domain.Entities;
+using Org.BouncyCastle.Utilities.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,13 +35,15 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
         public async Task<IEnumerable<Voucher>> CheckVoucherExp()
         {
             var check = DateTime.Now;
-            var qr =  await _Db.vouchers.Where(i=>i.EndDate> check).ToListAsync();
+            var qr =  await _Db.vouchers.Where(i=>i.EndDate< check).ToListAsync();
 
             return qr;
         }
 
-   
-
+        //public async Task<Voucher> CheckVoucherId(Guid Id)
+        //{
+        //    await 
+        //}
 
         public async Task<int> DeleteVoucher(Guid Id)
         {
@@ -85,9 +89,17 @@ namespace OrderSvc.Infrastructure.Persistences.Repositories
 		public async Task<int> UpdateVoucher(Voucher voucher)
         {
             var obj = await _Db.vouchers.FindAsync(voucher.Id);
+            var temp = new List<string>();
+            temp.AddRange(obj.Image);
+
             if (obj != null)
             {
-                _mapper.Map(obj, voucher);
+                if(voucher.Image.Count == 0)
+                {
+                    obj.Image.Clear();
+                    voucher.Image = temp;
+                }
+                _mapper.Map(voucher, obj);
                 return await _Db.SaveChangesAsync();
             }
             return 0;

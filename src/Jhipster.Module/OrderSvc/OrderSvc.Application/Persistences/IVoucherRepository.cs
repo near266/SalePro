@@ -15,6 +15,7 @@ namespace OrderSvc.Application.Persistences
         Task<int> DeleteVoucher(Guid Id);
 		Task<Voucher> GetDetail(Guid Id);
         Task<IEnumerable <Voucher>> CheckVoucherExp();
+     //   Task<Voucher> CheckVoucherId(List<Guid> Id);
 		Task<PagedList<Voucher>> SearchVoucher(string? CodeVoucher, int page ,int pageSize);
          
     }

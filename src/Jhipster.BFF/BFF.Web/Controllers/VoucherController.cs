@@ -99,7 +99,23 @@ namespace OrderSvc.Controller
 			_logger.LogInformation($"REST request Search Voucher : {JsonConvert.SerializeObject(rq)}");
 			try
 			{
-				var res = await _mediator.Send(rq);
+			var check = new CheckVoucherQuery() { };
+			 var checkres=	await _mediator.Send(check);
+				if(checkres!=null)
+				{
+
+                foreach (var item in checkres)
+                {
+
+                    var up = new UpdateVoucherCommand()
+                    {
+                        Id = item.Id,
+                        isExpired = 0,
+                    };
+                    await _mediator.Send(up);
+                }
+				}
+                var res = await _mediator.Send(rq);
 				return Ok(res);
 			}
 			catch (Exception e)
