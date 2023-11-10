@@ -22,6 +22,9 @@
 
 	<PropertyGroup>
 		<ServerGarbageCollection>false</ServerGarbageCollection>
+		<UserSecretsId>adacc3de-4469-499f-8eaf-d95af8f35395</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileContext>..\..</DockerfileContext>
 	</PropertyGroup>
 
 	<PropertyGroup Condition=" '$(RunConfiguration)' == 'NhipsterSampleApplication' " />
@@ -37,6 +40,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
 		<PackageReference Include="Scrutor" Version="4.2.0" />
 		<PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
 		<PackageReference Include="Serilog.Enrichers.ClientInfo" Version="1.2.0" />

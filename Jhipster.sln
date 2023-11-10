@@ -45,6 +45,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderSvc.Infrastructure", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderSvc.Share", "src\Jhipster.Module\OrderSvc\OrderSvc.Share\OrderSvc.Share.csproj", "{A6F43F42-1A29-48D4-96A7-B2B5970ACA76}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dockerfile", "Dockerfile", "{B537983A-3776-4949-8B4A-2F36E3077E11}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
